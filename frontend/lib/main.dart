@@ -20,14 +20,15 @@
 // }
 
 import 'package:flutter/material.dart';
-
 import 'colors.dart';
 
-import 'dashboard_page.dart';
-import 'tasklist_page.dart';
-import 'taskpost_page.dart';
-import 'method_page.dart';
-import 'profile_page.dart';
+import 'addtask_page.dart'; // page untuk tambah task ke task list
+
+import 'dashboard_page.dart'; // page untuk dashboard
+import 'tasklist_page.dart'; // page untuk liat list task
+import 'taskpost_page.dart'; // page untuk posting task
+import 'method_page.dart'; // page untuk alarm finder
+import 'profile_page.dart'; // page untuk profile
 
 void main() {
   runApp(MyApp());
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: FloatingBottomBar(),
       debugShowCheckedModeBanner: false,
-      );
+    );
   }
 }
 
@@ -49,8 +50,7 @@ class FloatingBottomBar extends StatefulWidget {
   const FloatingBottomBar({super.key});
 
   @override
-  FloatingBottomBarState createState() =>
-      FloatingBottomBarState();
+  FloatingBottomBarState createState() => FloatingBottomBarState();
 }
 
 class FloatingBottomBarState extends State<FloatingBottomBar> {
@@ -78,13 +78,14 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
       duration: Duration(milliseconds: 200),
       height: double.infinity,
       // margin: const EdgeInsets.symmetric(horizontal: 6),
-      decoration: isSelected
-          ? BoxDecoration(
-              color: primaryColor,
-              // .withOpacity(0.15),
-              borderRadius: BorderRadius.circular(15),
-            )
-          : null,
+      decoration:
+          isSelected
+              ? BoxDecoration(
+                color: primaryColor,
+                // .withOpacity(0.15),
+                borderRadius: BorderRadius.circular(15),
+              )
+              : null,
       child: Center(
         child: Icon(
           icon,
@@ -107,22 +108,41 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
 
     return Scaffold(
       extendBody: true,
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) => setState(() => _currentIndex = index),
-        children: _pages,
+      body: Stack(
+        children: [
+          PageView(
+            controller: _pageController,
+            onPageChanged: (index) => setState(() => _currentIndex = index),
+            children: _pages,
+          ),
+          Positioned(
+            bottom: 120, // adjust to raise above bottom bar
+            right: 16, // adjust for horizontal position
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddItemPage()),
+                );
+              },
+              backgroundColor: secondaryColor,
+              shape: CircleBorder(),
+              child: const Icon(Icons.add, color: primaryColor),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: PhysicalModel(
           color: Colors.transparent,
           elevation: 12,
-          borderRadius: BorderRadius.circular(15),
-          shadowColor: Colors.black.withOpacity(0.25),
+          borderRadius: BorderRadius.circular(30),
+          shadowColor: Colors.black.withValues(alpha: .25),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(30),
             child: BottomAppBar(
-              color: backgroundColor,
+              color: Colors.white,
               child: SizedBox(
                 height: 60,
                 child: Row(

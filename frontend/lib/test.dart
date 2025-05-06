@@ -43,8 +43,8 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
       // margin: const EdgeInsets.symmetric(horizontal: 6),
       decoration: isSelected
           ? BoxDecoration(
-              color: Colors.blue.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(15),
+              color: Colors.blue.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(100),
             )
           : null,
       child: Center(
@@ -85,7 +85,7 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
           color: Colors.transparent,
           elevation: 12,
           borderRadius: BorderRadius.circular(15),
-          shadowColor: Colors.black.withOpacity(0.40),
+          shadowColor: Colors.black.withValues(alpha: 0.40),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: BottomAppBar(
