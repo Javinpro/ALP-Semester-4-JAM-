@@ -1,6 +1,7 @@
 ---
 Status: Proposed
-Deciders: Aryo, Javin, Michael
+Deciders: Javin
+Informed: Aryo, Michael
 ---
 
 # MADR_02 - State Management Approach

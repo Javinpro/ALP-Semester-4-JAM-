@@ -1,6 +1,7 @@
 ---
 Status: Decided
-Deciders: Aryo, Javin, Michael
+Deciders: Javin
+Informed: Aryo, Michael
 ---
 
 # MADR_01 - App Architecture Pattern
@@ -27,7 +28,7 @@ Memilih architectural pattern yang akan digunakan untuk pengembangan aplikasi. D
 ## Decision Outcome
 
 **Status: Decided**
-Keputusan: Menggunakan architectural pattern MVVC atau Model View ViewModel
+Keputusan: Menggunakan architectural pattern MVVM atau Model View ViewModel
 
 ### Consequences
 
