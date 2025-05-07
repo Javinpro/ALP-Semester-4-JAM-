@@ -26,7 +26,7 @@ Aplikasi task list yang sedang dikembangkan harus tetap dapat diakses dan member
 ## Decision Outcome
 
 **Status: Accepted**
-Proposed: Menggunakan mekanisme Offline first.
+Keputusan: Menggunakan mekanisme Offline first.
 
 ### Consequences
 
