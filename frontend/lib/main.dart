@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 import 'addtask_page.dart'; // page untuk tambah task ke task list
-
 import 'dashboard_page.dart'; // page untuk dashboard
 import 'tasklist_page.dart'; // page untuk liat list task
 import 'taskpost_page.dart'; // page untuk posting task
@@ -77,20 +76,16 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
       height: double.infinity,
-      // margin: const EdgeInsets.symmetric(horizontal: 6),
-      decoration:
-          isSelected
-              ? BoxDecoration(
-                color: primaryColor,
-                // .withOpacity(0.15),
-                borderRadius: BorderRadius.circular(15),
-              )
-              : null,
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8), // Added margin here
+      decoration: isSelected
+          ? BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(15),
+            )
+          : null,
       child: Center(
         child: Icon(
           icon,
-          // color: isSelected ? Colors.blue : Colors.grey,
-          // just in case
         ),
       ),
     );
@@ -116,7 +111,7 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
             children: _pages,
           ),
           Positioned(
-            bottom: 120, // adjust to raise above bottom bar
+            bottom: 125, // adjust to raise above bottom bar
             right: 16, // adjust for horizontal position
             child: FloatingActionButton(
               onPressed: () {
@@ -133,30 +128,31 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
         ],
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 30),
         child: PhysicalModel(
           color: Colors.transparent,
-          elevation: 12,
-          borderRadius: BorderRadius.circular(30),
-          shadowColor: Colors.black.withValues(alpha: .25),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: BottomAppBar(
+          elevation: 24,
+          borderRadius: BorderRadius.circular(15),
+          shadowColor: Colors.black.withValues(alpha: .4),
+          child: Container(
+            height: 75,
+            decoration: BoxDecoration(
               color: Colors.white,
-              child: SizedBox(
-                height: 60,
-                child: Row(
-                  children: List.generate(icons.length, (index) {
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () => _onTap(index),
-                        behavior: HitTestBehavior.opaque,
-                        child: _buildNavItem(icons[index], index),
-                      ),
-                    );
-                  }),
-                ),
-              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              children: List.generate(icons.length, (index) {
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4), // Additional padding wrapper
+                    child: GestureDetector(
+                      onTap: () => _onTap(index),
+                      behavior: HitTestBehavior.opaque,
+                      child: _buildNavItem(icons[index], index),
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         ),
