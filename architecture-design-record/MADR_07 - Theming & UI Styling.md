@@ -1,10 +1,9 @@
 ---
-status: Decided
-date: 06-May-2025
-deciders: Aryo, Javin, Michael
+Status: Decided
+Deciders: Aryo, Javin, Michael
 ---
 
-# MADR-7: Theming & UI Styling
+# MADR_07 - Theming & UI Styling
 
 ## Context and Problem Statement
 
@@ -24,7 +23,7 @@ Putuskan apakah akan membangun sistem desain khusus atau memanfaatkan kemampuan 
 
 ## Decision Outcome
 
-Status: Decided
+**Status: Decided**
 Keputusan: Menggunakan Flutter Material Theming sebagai dasar, ditambah dengan pengembangan *design system* kustom di atasnya.
 
 ### Consequences
