@@ -1,6 +1,7 @@
 ---
 Status: Decided
-Deciders: Aryo, Javin, Michael
+Deciders: Javin
+Informed: Aryo, Michael
 ---
 
 # MADR_03 - Backend Integration Approach

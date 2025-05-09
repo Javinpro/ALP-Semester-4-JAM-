@@ -1,6 +1,7 @@
 ---
 Status: Accepted
-Deciders: Aryo, Javin, Michael
+Deciders: Javin
+Informed: Aryo, Michael
 ---
 
 # MADR_08 - Offline Support & Caching
