@@ -76,18 +76,18 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
       height: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8), // Added margin here
-      decoration: isSelected
-          ? BoxDecoration(
-              color: primaryColor,
-              borderRadius: BorderRadius.circular(15),
-            )
-          : null,
-      child: Center(
-        child: Icon(
-          icon,
-        ),
-      ),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 4,
+        vertical: 8,
+      ), // Added margin here
+      decoration:
+          isSelected
+              ? BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(15),
+              )
+              : null,
+      child: Center(child: Icon(icon)),
     );
   }
 
@@ -144,7 +144,9 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
               children: List.generate(icons.length, (index) {
                 return Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4), // Additional padding wrapper
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                    ), // Additional padding wrapper
                     child: GestureDetector(
                       onTap: () => _onTap(index),
                       behavior: HitTestBehavior.opaque,
