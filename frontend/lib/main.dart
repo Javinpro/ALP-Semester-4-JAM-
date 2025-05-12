@@ -20,8 +20,9 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:jam/login.dart';
+import 'package:jam/splash_screen.dart';
 import 'colors.dart';
-
 import 'addtask_page.dart'; // page untuk tambah task ke task list
 import 'dashboard_page.dart'; // page untuk dashboard
 import 'tasklist_page.dart'; // page untuk liat list task
@@ -38,10 +39,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FloatingBottomBar(),
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp(home: SplashScreen(), debugShowCheckedModeBanner: false);
   }
 }
 

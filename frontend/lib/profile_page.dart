@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
 import 'package:jam/custom_text_field.dart';
 import 'package:jam/edit_profile.dart';
+import 'package:jam/login.dart';
 import 'package:jam/text_template.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -11,7 +12,10 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(backgroundColor: backgroundColor),
+      appBar: AppBar(
+        backgroundColor: backgroundColor,
+        automaticallyImplyLeading: false,
+      ),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -93,8 +97,12 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // Implement your logout logic here
-                        print('Logout button pressed');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ), // Replace with your EditProfilePage widget
+                        );
                       },
                       child: const Text('Logout', style: headerred),
                     ),
