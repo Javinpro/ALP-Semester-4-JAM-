@@ -4,7 +4,7 @@ Deciders: Javin
 Informed: Aryo, Michael
 ---
 
-# MADR_01 - App Architecture Pattern
+# MADR_11 - Architecture Design Backend
 
 ## Context and Problem Statement
 
@@ -13,7 +13,6 @@ Memilih architectural pattern yang akan digunakan untuk pengembangan backend apl
 ## Decision Drivers
 
 - Kustomisasi mudah
-- Penggunaan Kembali Kode
 - Performa tinggi
 
 ## Considered Options
