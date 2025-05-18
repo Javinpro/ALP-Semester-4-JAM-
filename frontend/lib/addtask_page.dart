@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'colors.dart';
 
 class AddItemPage extends StatelessWidget {
   const AddItemPage({super.key});
@@ -6,7 +7,9 @@ class AddItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         title: const Text('Add Task'),
         leading: BackButton(),
       ),
