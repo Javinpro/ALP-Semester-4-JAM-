@@ -30,7 +30,7 @@ Proposed: Menggunakan Bussiness Logic Component (BloC) atau Riverpod
 
 BLoC
 - Good:
-    - Pisah tegas antara event, state, dan business logic, ideal untuk proyek yang akan besar
+    - Memisahkan class lagi antara event, state, dan business logic, idealnya BLoC dipakai untuk proyek besar atau fitur yang banyak. 
     - Widget seperti BlocBuilder, BlocListener membuat UI lebih mudah mengamati dan merespons perubahan state.
 - Bad:
     - Perlu banyak file (event, state, bloc) bahkan untuk logika yang simpel.
@@ -38,9 +38,8 @@ BLoC
 
 Riverpod
 - Good:
-    - State diatur dengan pendekatan deklaratif, mendukung berbagai jenis state (sync, async, computed).
-    - Bisa digunakan untuk berbagai gaya manajemen state (global/local state, reactive side effect, dll).
-    - Tidak perlu banyak file untuk mengatur state.
+    - Mengurangi _boilerplate code_ dibandingkan BLoC. Tidak perlu lagi membuat banyak _class_ seperti Event, State, dan Bloc untuk fitur yang simpel.
+    - Lebih intuitif dan cepat dipelajari, terutama bila baru mengenal _state management_.
 - Bad:
     - Berpotensi membuat kode tidak terstruktur
     - Kurang integrasi langsung dengan package lain dibandingkan "flutter_bloc"
