@@ -13,8 +13,8 @@ mengimplementasikan penanganan kesalahan dan pemantauan yang kuat, melibatkan al
 ## Decision Drivers
 
 - kebutuhan untuk menangkap dan menganalisis crash secara efektif di aplikasi mobile untuk memastikan stabilitas dan pengalaman pengguna yang baik.
-- penting untuk memiliki sistem yang dapat secara terpusat melacak dan melaporkan kesalahan yang terjadi di sisi backend Laravel, serta memberikan pemberitahuan proaktif untuk masalah kritis.
-- alat yang dipilih harus mudah diintegrasikan dengan teknologi yang sudah digunakan, yaitu aplikasi mobile (potensial dengan Firebase) dan backend Laravel.
+- penting untuk memiliki sistem yang dapat secara terpusat melacak dan melaporkan kesalahan yang terjadi di sisi backend, serta memberikan pemberitahuan proaktif untuk masalah kritis.
+- alat yang dipilih harus mudah diintegrasikan dengan teknologi yang sudah digunakan, yaitu aplikasi mobile (potensial dengan Firebase) dan backend django.
 - alat harus menyediakan informasi yang cukup detail (seperti stack trace, informasi request, konteks) untuk memudahkan analisis penyebab kesalahan dan proses debugging.
 
 ## Considered Options
@@ -26,7 +26,7 @@ mengimplementasikan penanganan kesalahan dan pemantauan yang kuat, melibatkan al
 ## Decision Outcome
 
 **Status: Proposed**
-Keputusan: masih mengusulkan untuk menggunakan Firebase Crashlytics untuk pelaporan kesalahan dan analisis crash, dan mengimplementasikan solusi Logging bawaan Laravel dan Sentry untuk pemantauan aplikasi dan debugging yang detail.
+Keputusan: masih mengusulkan untuk menggunakan Firebase Crashlytics untuk pelaporan kesalahan dan analisis crash, dan mengimplementasikan solusi Sentry untuk pemantauan aplikasi dan debugging yang detail.
 
 ### Consequences
 
@@ -38,14 +38,6 @@ Firebase Crashlytics
     - memungkinkan pengelompokan crash berdasarkan versi build, perangkat, dan segmen pengguna, membantu dalam memprioritaskan perbaikan.
 - Bad:
     - meskipun memungkinkan penambahan kunci dan log kustom ke laporan crash, alat ini tidak dirancang terutama untuk logging tingkat aplikasi yang detail dan pemantauan peristiwa non-fatal. 
-
-Logging bawaan Laravel
-- Good:
-    - menyediakan sistem logging bawaan yang mudah digunakan untuk mencatat berbagai peristiwa, kesalahan, dan aktivitas aplikasi backend ke file, database, atau layanan lainnya. 
-    - relatif sederhana.
-- Bad:
-    - menganalisis log dari file atau database secara manual bisa menjadi sulit dan kurang efisien untuk mengidentifikasi tren atau masalah yang kompleks.
-    - pemberitahuannya terbatas, yang dimana tidak secara otomatis memberikan pemberitahuan proaktif tentang kesalahan kritis.
 
 Sentry 
 - Good:
@@ -61,4 +53,3 @@ Sentry
 
 - Pengertian Firebase Crashlytics: https://firebase.google.com/docs/crashlytics?hl=id
 - Pengertian Sentry: https://sentry.io/
-- Pengertian Logging Laravel: https://www.domainesia.com/berita/laravel-adalah/
