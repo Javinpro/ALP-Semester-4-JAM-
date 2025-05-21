@@ -20,7 +20,6 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:jam/login.dart';
 import 'package:jam/splash_screen.dart';
 import 'colors.dart';
 import 'addtask_page.dart'; // page untuk tambah task ke task list
