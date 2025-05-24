@@ -2,68 +2,104 @@ import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
 import 'package:jam/text_template.dart';
 
+/// Kelas data untuk merepresentasikan satu item notifikasi.
+/// Ini akan membuat kode Anda lebih rapi dan mudah dikelola.
+class NotificationItem {
+  final IconData icon;
+  final Color iconColor;
+  final String text;
+
+  const NotificationItem({
+    required this.icon,
+    required this.iconColor,
+    required this.text,
+  });
+}
+
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
+
+  // Contoh data notifikasi.
+  // Anda bisa mendapatkan data ini dari API atau database di aplikasi nyata.
+  final List<NotificationItem> notifications = const [
+    NotificationItem(
+      icon: Icons.error_outline,
+      iconColor: orangeColor,
+      text: 'Someone has answered Task Statistika.',
+    ),
+    NotificationItem(
+      icon: Icons.check_circle_outlined,
+      iconColor: greenColor,
+      text: 'Answer Approved!',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: const Text('Notifications', style: headerblack),
-        iconTheme: const IconThemeData(color: secondaryColor),
-      ),
-      body: ListView.builder(
-        itemCount: _notifications.length,
-        itemBuilder: (context, index) {
-          final notification = _notifications[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(notification['title'] as String, style: headerblack2),
-                  sizedbox1,
-                  Text(notification['body'] as String, style: body1),
-                  sizedbox2,
-                  Text(notification['time'] as String, style: body1),
-                ],
-              ),
+        backgroundColor: backgroundColor,
+        title: const Text('Notifikasi', style: headerblack4),
+        leading: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: secondaryColor.withOpacity(0.3),
+                  spreadRadius: 0, // Seberapa jauh bayangan menyebar
+                  blurRadius: 6, // Seberapa buram bayangan
+                  offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
+                ),
+              ],
             ),
-          );
-        },
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: secondaryColor),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.separated(
+          itemCount: notifications.length,
+          itemBuilder: (context, index) {
+            // Mengambil item notifikasi berdasarkan indeks
+            final notification = notifications[index];
+            return Card(
+              color: backgroundColor,
+              elevation: 4.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      notification.icon,
+                      size: 40.0,
+                      color: notification.iconColor,
+                    ),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: Text(notification.text, style: headerblack),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          // Builder untuk pemisah antar item
+          separatorBuilder: (context, index) => sizedbox1,
+        ),
       ),
     );
   }
 }
-
-// Data notifikasi statis untuk keperluan UI
-final List<Map<String, String>> _notifications = [
-  {
-    'title': 'New Message',
-    'body': 'You have a new message from John Doe.',
-    'time': '5 minutes ago',
-  },
-  {
-    'title': 'Task Reminder',
-    'body': 'Don\'t forget to complete your daily report.',
-    'time': '30 minutes ago',
-  },
-  {
-    'title': 'System Update',
-    'body': 'A new version of the app is available. Update now!',
-    'time': '1 hour ago',
-  },
-  {
-    'title': 'Friend Request',
-    'body': 'Jane Smith sent you a friend request.',
-    'time': '2 hours ago',
-  },
-  {
-    'title': 'Event Starting Soon',
-    'body': 'The online workshop will begin in 15 minutes.',
-    'time': 'Yesterday',
-  },
-];
