@@ -18,6 +18,11 @@ const headerblack3 = TextStyle(
   fontWeight: FontWeight.w700,
   color: secondaryColor,
 );
+const headerblack4 = TextStyle(
+  fontSize: 35,
+  fontWeight: FontWeight.w700,
+  color: secondaryColor,
+);
 const body1 = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.w500,
