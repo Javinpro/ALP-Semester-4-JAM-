@@ -42,11 +42,19 @@ class NotificationPage extends StatelessWidget {
         backgroundColor: backgroundColor,
         title: const Text('Notifikasi', style: headerblack4),
         leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: Container(
             decoration: BoxDecoration(
               color: primaryColor,
-              borderRadius: BorderRadius.circular(4.0),
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: secondaryColor.withOpacity(0.3),
+                  spreadRadius: 0, // Seberapa jauh bayangan menyebar
+                  blurRadius: 6, // Seberapa buram bayangan
+                  offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
+                ),
+              ],
             ),
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: secondaryColor),
