@@ -93,8 +93,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(height: 130),
-
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
@@ -132,7 +130,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               sizedbox2,
               const CustomTextField(
                 labelText: 'Last Name',
-                prefixIcon: Icons.person_outline,
+                prefixIcon: Icons.person,
               ),
               sizedbox2,
               const CustomTextField(
