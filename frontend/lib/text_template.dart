@@ -7,6 +7,11 @@ const headerblack = TextStyle(
   fontWeight: FontWeight.w700,
   color: secondaryColor,
 );
+const headergrey = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
+  color: greyColor,
+);
 
 const headerblack2 = TextStyle(
   fontSize: 15,
