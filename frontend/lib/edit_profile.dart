@@ -59,6 +59,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: backgroundColor,
+        title: const Text('Edit Profile', style: headerblack4),
+        leading: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: secondaryColor.withOpacity(0.3),
+                  spreadRadius: 0, // Seberapa jauh bayangan menyebar
+                  blurRadius: 6, // Seberapa buram bayangan
+                  offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
+                ),
+              ],
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: secondaryColor),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ),
+      ),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -142,18 +169,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: FloatingActionButton(
-          backgroundColor: primaryColor,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(Icons.arrow_back, color: secondaryColor),
-        ),
-      ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.startTop, // Atur posisi FAB
     );
   }
 }

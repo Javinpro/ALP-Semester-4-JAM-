@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
-import 'package:jam/notification.dart'; // Make sure this path is correct for your color definitions
+import 'package:jam/notification.dart';
+import 'package:jam/text_template.dart'; // Make sure this path is correct for your color definitions
 
 class MethodPage extends StatelessWidget {
   const MethodPage({super.key});
@@ -10,47 +11,38 @@ class MethodPage extends StatelessWidget {
     return Scaffold(
       backgroundColor:
           backgroundColor, // Using the background color from your imported file
-      appBar: AppBar(
-        backgroundColor: Colors.transparent, // Making the app bar transparent
-        elevation: 0, // Removing the shadow
-        title: const Text(
-          "Methods", // Title for the app bar
-          style: TextStyle(
-            color: Colors.white, // Adjust text color as needed
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: false, // Align title to the left
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationPage(),
-                  ), // Replace with your EditProfilePage widget
-                );
-              },
-
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white, // Circle background color
-                  shape: BoxShape.circle,
-                ),
-
-                child: const Icon(
-                  Icons.notifications,
-                  color: Colors.black, // Notification icon color
-                  size: 24.0,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: AppBar(
+          backgroundColor: backgroundColor,
+          elevation: 0,
+          title: const Text('Method Page', style: headerblack4),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 20.0, top: 10.0),
+              child: CircleAvatar(
+                backgroundColor: secondaryColor,
+                radius: 30, // Increased size
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.notifications_none,
+                    color: backgroundColor,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationPage(),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -61,18 +53,16 @@ class MethodPage extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 24.0),
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(
-                    0.2,
-                  ), // Slightly transparent white
-                  borderRadius: BorderRadius.circular(30.0),
+                  color: backgroundColor, // Slightly transparent white
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: const TextField(
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: secondaryColor),
                   decoration: InputDecoration(
                     hintText: "Search...",
-                    hintStyle: TextStyle(color: Colors.white70),
+                    hintStyle: TextStyle(color: secondaryColor),
                     border: InputBorder.none,
-                    icon: Icon(Icons.search, color: Colors.white70),
+                    icon: Icon(Icons.search, color: secondaryColor),
                   ),
                 ),
               ),
@@ -80,29 +70,30 @@ class MethodPage extends StatelessWidget {
               _buildMethodCard(
                 context,
                 imagePath:
-                    'assets/images/method_1.png', // Replace with your image path
-                title: 'Deep Breathing',
+                    'assets/img/Pomodoro.jpg', // Replace with your image path
+                title: 'Pomodoro',
                 description:
-                    'Relax and reduce stress with guided deep breathing exercises.',
+                    'Membagi pekerjaan menjadi interval 25 menit yang dipisahkan oleh istirahat singkat 10 menit.',
               ),
-              const SizedBox(height: 16.0),
+              sizedbox11,
               _buildMethodCard(
                 context,
                 imagePath:
-                    'assets/images/method_2.png', // Replace with your image path
-                title: 'Mindful Meditation',
+                    'assets/img/Metode 5217.jpg', // Replace with your image path
+                title: 'Metode 52/17',
                 description:
-                    'Cultivate presence and inner peace through mindful awareness.',
+                    'Fokus pada pekerjaan selama 52 menit, diikuti dengan istirahat selama 17 menit.',
               ),
-              const SizedBox(height: 16.0),
+              sizedbox11,
               _buildMethodCard(
                 context,
                 imagePath:
-                    'assets/images/method_3.png', // Replace with your image path
-                title: 'Progressive Muscle Relaxation',
+                    'assets/img/Ultradian Rhythm.jpg', // Replace with your image path
+                title: 'Ultradian Rhythm',
                 description:
-                    'Ease tension by tensing and relaxing different muscle groups.',
+                    'Fokus pada pekerjaan intensif selama 90 menit, diikuti dengan istirahat selama 20 menit.',
               ),
+              sizedbox10,
             ],
           ),
         ),
@@ -159,24 +150,25 @@ class MethodPage extends StatelessWidget {
             const SizedBox(height: 12.0),
             Align(
               alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle "Start" button tap
-                  print("Start button tapped for: $title");
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent, // Button background color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 46,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 10,
-                  ),
-                ),
-                child: const Text(
-                  "Start",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  onPressed: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const EditProfilePage(),
+                    //   ), // Replace with your EditProfilePage widget
+                    // );
+                  },
+                  child: const Text('Start', style: headerblack),
                 ),
               ),
             ),
