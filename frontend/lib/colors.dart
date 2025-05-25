@@ -8,5 +8,6 @@ const backgroundColor = Color(0xFFFFFFFF);
 const redColor = Color(0xFFCC001E);
 const greenColor = Color(0xFF44CC00);
 const orangeColor = Color(0xFFEB6B0F);
+const greyColor = Color(0xFF808080);
 // const backgroundColor = Color(0xFF000000);
 // const textColor = Color(0xFF000000);
