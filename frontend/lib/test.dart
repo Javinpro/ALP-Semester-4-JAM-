@@ -1,113 +1,62 @@
-// ini hanya test page, tidak usah diperhatikan
-// - Aryo
+// import 'package:fl_chart/fl_chart.dart';
+// import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
+// class WeeklyCompletionBarChart extends StatelessWidget {
+//   final List<int> completedTasks; // List of completed tasks per week
 
-void main() {
-  runApp(MyApp());
-}
+//   const WeeklyCompletionBarChart({super.key, required this.completedTasks});
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: FloatingBottomBar());
-  }
-}
-
-class FloatingBottomBar extends StatefulWidget {
-  const FloatingBottomBar({super.key});
-
-  @override
-  FloatingBottomBarState createState() =>
-      FloatingBottomBarState();
-}
-
-class FloatingBottomBarState extends State<FloatingBottomBar> {
-  int _currentIndex = 0;
-  final PageController _pageController = PageController();
-
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-      _pageController.jumpToPage(index);
-    });
-  }
-
-  Widget _buildNavItem(IconData icon, int index) {
-    final isSelected = index == _currentIndex;
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      height: double.infinity,
-      // margin: const EdgeInsets.symmetric(horizontal: 6),
-      decoration: isSelected
-          ? BoxDecoration(
-              color: Colors.blue.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(100),
-            )
-          : null,
-      child: Center(
-        child: Icon(
-          icon,
-          color: isSelected ? Colors.blue : Colors.grey,
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final icons = [
-      Icons.home,
-      Icons.search,
-      Icons.notifications,
-      Icons.favorite,
-      Icons.person
-    ];
-
-    return Scaffold(
-      extendBody: true,
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) => setState(() => _currentIndex = index),
-        children: const [
-          Center(child: Text("Home Page")),
-          Center(child: Text("Search Page")),
-          Center(child: Text("Notifications Page")),
-          Center(child: Text("Favorites Page")),
-          Center(child: Text("Profile Page")),
-        ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: PhysicalModel(
-          color: Colors.transparent,
-          elevation: 12,
-          borderRadius: BorderRadius.circular(15),
-          shadowColor: Colors.black.withValues(alpha: 0.40),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: BottomAppBar(
-              color: Colors.white,
-              child: SizedBox(
-                height: 60,
-                child: Row(
-                  children: List.generate(icons.length, (index) {
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () => _onTap(index),
-                        behavior: HitTestBehavior.opaque,
-                        child: _buildNavItem(icons[index], index),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AspectRatio(
+//       aspectRatio: 1.5,
+//       child: BarChart(
+//         BarChartData(
+//           alignment: BarChartAlignment.spaceAround,
+//           maxY: (completedTasks.reduce((a, b) => a > b ? a : b) * 1.2).ceilToDouble(),
+//           barTouchData: BarTouchData(enabled: true),
+//           titlesData: FlTitlesData(
+//             leftTitles: AxisTitles(
+//               sideTitles: SideTitles(showTitles: true, reservedSize: 30),
+//             ),
+//             bottomTitles: AxisTitles(
+//               sideTitles: SideTitles(
+//                 showTitles: true,
+//                 getTitlesWidget: (value, _) {
+//                   switch (value.toInt()) {
+//                     case 0:
+//                       return const Text('Wk 1');
+//                     case 1:
+//                       return const Text('Wk 2');
+//                     case 2:
+//                       return const Text('Wk 3');
+//                     case 3:
+//                       return const Text('Wk 4');
+//                     default:
+//                       return const Text('');
+//                   }
+//                 },
+//               ),
+//             ),
+//             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+//             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+//           ),
+//           borderData: FlBorderData(show: false),
+//           barGroups: List.generate(completedTasks.length, (index) {
+//             return BarChartGroupData(
+//               x: index,
+//               barRods: [
+//                 BarChartRodData(
+//                   toY: completedTasks[index].toDouble(),
+//                   color: Colors.blueAccent,
+//                   width: 22,
+//                   borderRadius: BorderRadius.circular(4),
+//                 )
+//               ],
+//             );
+//           }),
+//         ),
+//       ),
+//     );
+//   }
+// }
