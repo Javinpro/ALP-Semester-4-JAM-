@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
               sizedbox2,
               const CustomTextField(
                 labelText: 'Last Name',
-                prefixIcon: Icons.person_outline,
+                prefixIcon: Icons.person,
                 readOnly: true,
               ),
               sizedbox2,

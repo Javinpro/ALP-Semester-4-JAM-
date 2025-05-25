@@ -3,10 +3,14 @@ import 'package:jam/colors.dart';
 import 'package:jam/notification.dart';
 import 'package:jam/text_template.dart'; // Make sure this path is correct for your color definitions
 
-class MethodPage extends StatelessWidget {
+class MethodPage extends StatefulWidget {
   const MethodPage({super.key});
 
   @override
+  State<MethodPage> createState() => _MethodPageState();
+}
+
+class _MethodPageState extends State<MethodPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
@@ -45,27 +49,44 @@ class MethodPage extends StatelessWidget {
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               // --- Search Bar ---
               Container(
                 margin: const EdgeInsets.only(bottom: 24.0),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 decoration: BoxDecoration(
                   color: backgroundColor, // Slightly transparent white
                   borderRadius: BorderRadius.circular(20.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: secondaryColor.withOpacity(0.3),
+                      spreadRadius: 0, // Seberapa jauh bayangan menyebar
+                      blurRadius: 6, // Seberapa buram bayangan
+                      offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
+                    ),
+                  ],
                 ),
-                child: const TextField(
+                child: TextField(
                   style: TextStyle(color: secondaryColor),
                   decoration: InputDecoration(
-                    hintText: "Search...",
-                    hintStyle: TextStyle(color: secondaryColor),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
+                    hintText: "Search method...",
+                    hintStyle: headergrey,
                     border: InputBorder.none,
-                    icon: Icon(Icons.search, color: secondaryColor),
+                    icon: Container(
+                      padding: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.search, color: primaryColor),
+                    ),
                   ),
                 ),
               ),
+
               // --- Cards ---
               _buildMethodCard(
                 context,
