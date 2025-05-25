@@ -51,3 +51,5 @@ const sizedbox4 = SizedBox(height: 57);
 const sizedbox5 = SizedBox(height: 5);
 const sizedbox8 = SizedBox(height: 100);
 const sizedbox9 = SizedBox(height: 35);
+const sizedbox10 = SizedBox(height: 200);
+const sizedbox11 = SizedBox(height: 40);
