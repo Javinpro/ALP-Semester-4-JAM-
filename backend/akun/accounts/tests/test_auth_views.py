@@ -8,9 +8,10 @@ User = get_user_model()
 
 class AuthTests(APITestCase):
     def setUp(self):
-        self.register_url = reverse('register')  # Sesuaikan dengan URL name kamu
-        self.profile_url = reverse('profile-detail')  # Sesuaikan
-        self.logout_url = reverse('logout')  # Sesuaikan
+        self.register_url = reverse('register')
+        self.profile_url = reverse('profile-detail')
+        self.logout_url = reverse('logout')
+        self.profile_edit_url = reverse('profile-edit')
 
         self.user = User.objects.create_user(
             username='testuser',
@@ -46,12 +47,15 @@ class AuthTests(APITestCase):
         data = {
             'first_name': 'Updated',
             'last_name': 'Name',
+            'username': 'updateduser',
             'password': 'newsecurepass'
         }
-        response = self.client.put(self.profile_url, data)
+        response = self.client.put(self.profile_edit_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
+        self.assertEqual(self.user.first_name, 'Updated')
         self.assertTrue(self.user.check_password('newsecurepass'))
+
 
     def test_logout(self):
         refresh = RefreshToken.for_user(self.user)
@@ -84,4 +88,3 @@ class AuthTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access', response.data)
 
-    
