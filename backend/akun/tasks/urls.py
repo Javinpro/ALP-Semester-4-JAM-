@@ -9,7 +9,5 @@ router.register(r'task-answers', TaskAnswerViewSet, basename='taskanswer')
 
 urlpatterns = [
     path('', include(router.urls)),
-
-    # Ini manual, karena UserProfileView adalah APIView (bukan ViewSet)
     path('profile/', UserProfileView.as_view(), name='user-profile'),
 ]
