@@ -33,6 +33,11 @@ const body1 = TextStyle(
   fontWeight: FontWeight.w500,
   color: secondaryColor,
 );
+const body2 = TextStyle(
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+  color: secondaryColor,
+);
 
 const headeryellow = TextStyle(
   fontSize: 15,
