@@ -66,6 +66,7 @@ class ProfilePage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
+                        elevation: 4, // Tambahkan efek bayangan
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -92,13 +93,15 @@ class ProfilePage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
+                        elevation: 4, // Tambahkan efek bayangan
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
+                      onPressed: () async {
+                        Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (context) => const LoginPage(),
-                          ), // Replace with your EditProfilePage widget
+                          ),
+                          (Route<dynamic> route) => false,
+                          // Replace with your EditProfilePage widget
                         );
                       },
                       child: const Text('Logout', style: headerred),

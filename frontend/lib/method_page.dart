@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
+import 'package:jam/detail_method/Metode_52-17.dart';
+import 'package:jam/detail_method/Ultradian_Rhythm.dart';
+import 'package:jam/detail_method/pomodoro.dart';
 import 'package:jam/notification.dart';
 import 'package:jam/text_template.dart'; // Make sure this path is correct for your color definitions
 
@@ -95,6 +98,11 @@ class _MethodPageState extends State<MethodPage> {
                 title: 'Pomodoro',
                 description:
                     'Membagi pekerjaan menjadi interval 25 menit yang dipisahkan oleh istirahat singkat 10 menit.',
+                detailPage: const PomodoroDetailPage(
+                  title: 'Pomodoro',
+                  title2: 'Langkah Metode : ',
+                  imagePath: 'assets/img/Pomodoro.jpg',
+                ),
               ),
               sizedbox11,
               _buildMethodCard(
@@ -104,6 +112,11 @@ class _MethodPageState extends State<MethodPage> {
                 title: 'Metode 52/17',
                 description:
                     'Fokus pada pekerjaan selama 52 menit, diikuti dengan istirahat selama 17 menit.',
+                detailPage: const Metode5217Page(
+                  title: 'Metode 52/17',
+                  title2: 'Langkah Metode : ',
+                  imagePath: 'assets/img/Metode 5217.jpg',
+                ),
               ),
               sizedbox11,
               _buildMethodCard(
@@ -112,7 +125,12 @@ class _MethodPageState extends State<MethodPage> {
                     'assets/img/Ultradian Rhythm.jpg', // Replace with your image path
                 title: 'Ultradian Rhythm',
                 description:
-                    'Fokus pada pekerjaan intensif selama 90 menit, diikuti dengan istirahat selama 20 menit.',
+                    'Fokus pada pekerjaan intensif selama 90 menit, diikuti dengan istirahat selama 30 menit.',
+                detailPage: const UltradianRhythmPage(
+                  title: 'Ultradian Rhythm',
+                  title2: 'Langkah Metode : ',
+                  imagePath: 'assets/img/Ultradian Rhythm.jpg',
+                ),
               ),
               sizedbox10,
             ],
@@ -127,6 +145,7 @@ class _MethodPageState extends State<MethodPage> {
     required String imagePath,
     required String title,
     required String description,
+    required Widget detailPage,
   }) {
     return Card(
       elevation: 5,
@@ -180,14 +199,13 @@ class _MethodPageState extends State<MethodPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    elevation: 4, // Tambahkan efek bayangan
                   ),
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const EditProfilePage(),
-                    //   ), // Replace with your EditProfilePage widget
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => detailPage),
+                    );
                   },
                   child: const Text('Start', style: headerblack),
                 ),
