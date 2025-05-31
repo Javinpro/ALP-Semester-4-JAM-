@@ -17,6 +17,11 @@ const headergrey = TextStyle(
   fontWeight: FontWeight.w700,
   color: greyColor,
 );
+const headergrey2 = TextStyle(
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+  color: greyColor,
+);
 
 const headerblack2 = TextStyle(
   fontSize: 15,
