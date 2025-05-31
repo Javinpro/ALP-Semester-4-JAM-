@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
-import 'package:jam/detail_method/Metode_52-17.dart';
-import 'package:jam/detail_method/Ultradian_Rhythm.dart';
-import 'package:jam/detail_method/pomodoro.dart';
+import 'package:jam/method_management/detail_method/Metode_52-17.dart';
+import 'package:jam/method_management/detail_method/Ultradian_Rhythm.dart';
+import 'package:jam/method_management/detail_method/pomodoro.dart';
 import 'package:jam/notification.dart';
 import 'package:jam/text_template.dart'; // Make sure this path is correct for your color definitions
 

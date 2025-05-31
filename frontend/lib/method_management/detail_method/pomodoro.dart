@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
+import 'package:jam/method_management/timer_method/timer_podomoro.dart';
 import 'package:jam/text_template.dart';
 
-class Metode5217Page extends StatelessWidget {
+class PomodoroDetailPage extends StatelessWidget {
   final String title;
   final String title2;
   final String imagePath;
 
-  const Metode5217Page({
+  const PomodoroDetailPage({
     super.key,
     required this.title,
     required this.title2,
@@ -103,10 +104,11 @@ class Metode5217Page extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                _buildStepText('1. Fokus pada satu tugas selama 52 menit.'),
-
                 _buildStepText(
-                  '2. Gunakan waktu istirahat 17 menit untuk meregangkan tubuh, minum air, atau melakukan aktivitas santai.',
+                  '1. Fokus sepenuhnya pada tugas tanpa gangguan selama 25 menit.',
+                ),
+                _buildStepText(
+                  '2. Gunakan waktu istirahat 10 menit untuk meregangkan tubuh, minum air, atau melakukan aktivitas santai.',
                 ),
                 _buildStepText('3. Ulangi proses sampai tugas selesai.'),
               ],
@@ -128,7 +130,12 @@ class Metode5217Page extends StatelessWidget {
               elevation: 4, // Tambahkan efek bayangan
             ),
             onPressed: () {
-              // Contoh: Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PomodoroTimerPage(methodName: title),
+                ),
+              );
             },
             child: Text(
               'Mulai Sekarang',

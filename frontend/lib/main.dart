@@ -26,7 +26,7 @@ import 'addtask_page.dart'; // page untuk tambah task ke task list
 import 'dashboard_page.dart'; // page untuk dashboard
 import 'tasklist_page.dart'; // page untuk liat list task
 import 'taskpost_page.dart'; // page untuk posting task
-import 'method_page.dart'; // page untuk alarm finder
+import 'method_management/method_page.dart'; // page untuk alarm finder
 import 'profile_page.dart'; // page untuk profile
 
 void main() {

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jam/colors.dart';
+import 'package:jam/method_management/timer_method/timer_ultradian_rhythm.dart';
 import 'package:jam/text_template.dart';
 
-class PomodoroDetailPage extends StatelessWidget {
+class UltradianRhythmPage extends StatelessWidget {
   final String title;
   final String title2;
   final String imagePath;
 
-  const PomodoroDetailPage({
+  const UltradianRhythmPage({
     super.key,
     required this.title,
     required this.title2,
@@ -103,11 +104,10 @@ class PomodoroDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
+                _buildStepText('1. Fokus pada satu tugas selama 90 menit.'),
+
                 _buildStepText(
-                  '1. Fokus sepenuhnya pada tugas tanpa gangguan selama 25 menit.',
-                ),
-                _buildStepText(
-                  '2. Gunakan waktu istirahat 10 menit untuk meregangkan tubuh, minum air, atau melakukan aktivitas santai.',
+                  '2. Gunakan waktu istirahat 30 menit untuk meregangkan tubuh, minum air, atau melakukan aktivitas santai.',
                 ),
                 _buildStepText('3. Ulangi proses sampai tugas selesai.'),
               ],
@@ -129,7 +129,13 @@ class PomodoroDetailPage extends StatelessWidget {
               elevation: 4, // Tambahkan efek bayangan
             ),
             onPressed: () {
-              // Contoh: Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => UltradianRhythmTimerPage(methodName: title),
+                ),
+              );
             },
             child: Text(
               'Mulai Sekarang',
