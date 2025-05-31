@@ -129,12 +129,7 @@ class Metode5217Page extends StatelessWidget {
               elevation: 4, // Tambahkan efek bayangan
             ),
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => metode5217TimerPage(methodName: title),
-                ),
-              );
+              _showStartConfirmationModal(context, title); // Panggil modal
             },
             child: Text(
               'Mulai Sekarang',
@@ -158,4 +153,72 @@ class Metode5217Page extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _showStartConfirmationModal(
+  BuildContext context,
+  String methodName,
+) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true, // User bisa menutup modal dengan tap di luar
+    builder: (BuildContext dialogContext) {
+      return AlertDialog(
+        backgroundColor: backgroundColor,
+        title: Text(
+          'Apakah kamu siap?',
+          style: headerblack4,
+          textAlign: TextAlign.center, // <--- Menengahkan judul
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Center(
+                // <--- Memastikan konten utama di tengah
+                child: Text(
+                  'Dengan mengklik mulai, penghitung waktu metode ini akan secara otomatis dimulai',
+                  style: headergrey2,
+                  textAlign:
+                      TextAlign.center, // <--- Menengahkan teks di dalam Center
+                ),
+              ),
+              sizedbox4,
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          // Menggunakan Center atau Align untuk menengahkan tombol di bagian actions
+          Center(
+            // <--- Memastikan tombol di tengah
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 50.0, // Lebar padding horizontal
+                  vertical: 22.0, // Tinggi padding vertikal
+                ),
+                backgroundColor: primaryColor, // Warna tombol "Start Now!"
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Tutup modal
+                Navigator.pushReplacement(
+                  // Navigasi ke halaman timer
+                  context,
+                  MaterialPageRoute(
+                    // Pastikan Anda meneruskan `methodName` ke halaman timer
+                    builder:
+                        (context) =>
+                            metode5217TimerPage(methodName: methodName),
+                  ),
+                );
+              },
+              child: const Text('Ayo mulai!', style: headerblack),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
