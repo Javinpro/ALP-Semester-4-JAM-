@@ -265,7 +265,7 @@ class _PomodoroTimerPageState extends State<PomodoroTimerPage> {
               height: 355,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: BoxBorder.all(color: secondaryColor, width: 5),
+                border: Border.all(color: secondaryColor, width: 5),
               ),
               child: Center(
                 child: Text(

@@ -6,6 +6,9 @@ import 'notification.dart';
 import 'calendar_widget.dart';
 import 'chart_widget.dart';
 
+// import 'activitycalendar_page.dart'; // for testing
+
+// reference for bar chart
 // int bar_1 = 7;
 // int bar_2 = 4;
 // int bar_3 = 14;
@@ -133,6 +136,37 @@ class DashboardPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 200), // mitigasi bottom navbar
+
+                // TESTING AREA
+
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: primaryColor,
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15),
+                //       ),
+                //     ),
+                //     onPressed: () {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => const ActivityCalendarPage(),
+                //         ),
+                //       );
+                //     },
+                //     child: const Text(
+                //       'Go to Activity Calendar',
+                //       style: TextStyle(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.bold,
+                //         color: Colors.white,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height:200),
                 ],
               ),
             ),
