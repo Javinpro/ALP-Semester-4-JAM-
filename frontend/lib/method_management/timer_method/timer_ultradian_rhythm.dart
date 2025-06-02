@@ -19,8 +19,8 @@ class UltradianRhythmTimerPage extends StatefulWidget {
 
 class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
   Timer? _timer;
-  int _studyTimeInSeconds = 90 * 60; // 90 menit untuk study time
-  int _restTimeInSeconds = 30 * 60; // 30 menit untuk rest time
+  int _studyTimeInSeconds = 90 * 60;
+  int _restTimeInSeconds = 30 * 60;
   int _currentSeconds = 0;
   UltradianRhythmStatus _currentStatus = UltradianRhythmStatus.study;
   final ImagePicker _picker = ImagePicker(); // Instance untuk ImagePicker
@@ -55,51 +55,67 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
       });
       _startTimer(); // Mulai timer untuk rest time
     } else if (_currentStatus == UltradianRhythmStatus.rest) {
-      // Rest time selesai, tampilkan modal dan kemudian halaman kamera
+      // Rest time selesai, tampilkan modal ambil foto
       _timer?.cancel(); // Pastikan timer berhenti
       _showTakeFotoModal(context);
     }
   }
 
-  // Fungsi untuk menampilkan modal informasi ambil foto
+  // Fungsi yang sekarang dipanggil oleh modal "Stop Method"
+  void _forceStopAndGoBack() {
+    _timer?.cancel();
+    setState(() {
+      _currentStatus =
+          UltradianRhythmStatus.completed; // Atur status menjadi Completed
+      _currentSeconds = 0; // Reset timer
+    });
+    Navigator.pop(context); // Kembali ke halaman sebelumnya (detail method)
+  }
+
+  // Fungsi untuk menampilkan modal "Matikan Alarmnya!!"
   Future<void> _showTakeFotoModal(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // User must tap button to dismiss
       builder: (BuildContext dialogContext) {
         return AlertDialog(
+          backgroundColor: backgroundColor,
           title: const Text(
-            'Waktunya Ambil Foto!',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            'Matikan Alarmnya!!',
+            style: headerblack4,
+            textAlign: TextAlign.center, // Center the title text
           ),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Ambil foto apapun yang menggambarkan momen ini untuk melanjutkan metode ${widget.methodName}.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                ),
-                const SizedBox(height: 15),
-                Text(
-                  'Foto ini tidak akan disimpan secara permanen di perangkat Anda atau dibagikan tanpa izin Anda.',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                  'Klik "Ambil foto sekarang!" untuk mematikan alarm dan melanjutkan metode.',
+                  style: body1,
+                  textAlign: TextAlign.center, // Center the content text
                 ),
               ],
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Oke, Ambil Foto!',
-                style: TextStyle(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18.0, // Adjusted padding
+                    vertical: 18.0, // Adjusted padding
+                  ),
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
+                onPressed: () {
+                  Navigator.of(dialogContext).pop(); // Close modal
+                  _takePicture(); // Call the function to take a picture
+                },
+                child: const Text('Ambil foto sekarang!', style: headerblack),
               ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Tutup modal
-                _takePicture(); // Panggil fungsi ambil foto
-              },
             ),
           ],
         );
@@ -107,7 +123,7 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
     );
   }
 
-  // Fungsi untuk mengambil foto (placeholder)
+  // Fungsi untuk mengambil foto
   Future<void> _takePicture() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
@@ -115,29 +131,106 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Foto berhasil diambil: ${image.path}')),
         );
-        // Di sini Anda bisa memproses foto (misalnya, menampilkannya, atau menyimpannya)
-        // Setelah foto diambil, set status menjadi completed
-        setState(() {
-          _currentStatus = UltradianRhythmStatus.completed;
-        });
+        // Setelah foto diambil, tampilkan modal konfirmasi berikutnya
+        _showNextCycleConfirmationModal();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Pengambilan foto dibatalkan.')),
         );
-        // Jika dibatalkan, mungkin langsung ke status completed atau kembali ke halaman sebelumnya
-        setState(() {
-          _currentStatus = UltradianRhythmStatus.completed;
-        });
+        // Jika dibatalkan, tetap tawarkan pilihan lanjutan atau kembali
+        _showNextCycleConfirmationModal(); // Masih menawarkan konfirmasi setelah pembatalan
       }
     } catch (e) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Gagal mengakses kamera: $e')));
-      // Jika ada error, set status menjadi completed
-      setState(() {
-        _currentStatus = UltradianRhythmStatus.completed;
-      });
+      // Jika ada error, tetap tawarkan pilihan lanjutan atau kembali
+      _showNextCycleConfirmationModal(); // Masih menawarkan konfirmasi setelah error
     }
+  }
+
+  // --- Fungsi Baru: Modal Konfirmasi Lanjutkan Siklus Timer ---
+  Future<void> _showNextCycleConfirmationModal() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User harus berinteraksi dengan tombol
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: backgroundColor,
+          title: const Text(
+            'Lanjutkan Metode?',
+            style: headerblack4,
+            textAlign: TextAlign.center,
+          ),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Apakah Anda ingin melanjutkan siklus metode (kembali ke waktu belajar) atau kembali ke halaman detail metode?',
+                  style: body1,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 15.0,
+                    ),
+                    backgroundColor: backgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    side: const BorderSide(
+                      color: redColor,
+                      width: 3,
+                    ), // Border for "Keluar"
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(); // Tutup modal
+                    Navigator.pop(
+                      context,
+                    ); // Kembali ke halaman sebelumnya (detail method)
+                    // Set status completed jika perlu di halaman sebelumnya
+                  },
+                  child: const Text('Keluar', style: headerred),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 15.0,
+                    ),
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(); // Tutup modal
+                    // Lanjutkan siklus timer
+                    setState(() {
+                      _currentStatus = UltradianRhythmStatus.study;
+                      _currentSeconds = _studyTimeInSeconds;
+                    });
+                    _startTimer();
+                  },
+                  child: const Text('Lanjutkan', style: headerblack),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   String _formatTime(int seconds) {
@@ -152,16 +245,6 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
     super.dispose();
   }
 
-  void _forceStopAndGoBack() {
-    _timer?.cancel();
-    setState(() {
-      _currentStatus =
-          UltradianRhythmStatus.completed; // Atur status menjadi Completed
-      _currentSeconds = 0; // Reset timer
-    });
-    Navigator.pop(context); // Kembali ke halaman sebelumnya (detail method)
-  }
-
   // --- Fungsi untuk menampilkan modal konfirmasi Stop Method ---
   Future<void> _showStopMethodConfirmationModal() async {
     return showDialog<void>(
@@ -169,46 +252,75 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
       barrierDismissible: false, // User harus berinteraksi dengan tombol
       builder: (BuildContext dialogContext) {
         return AlertDialog(
+          backgroundColor: backgroundColor,
           title: const Text(
-            'Stop Method',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            'Hentikan Metode',
+            style: headerblack4,
+            textAlign: TextAlign.center, // Center the title text
           ),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Klik "Continue" untuk melanjutkan metode, atau klik "Stop" untuk kembali ke halaman detail metode.',
-                  style: TextStyle(fontSize: 16),
+                  'Dengan mengklik lanjutkan untuk meneruskan metode atau klik berhenti untuk kembali ke metode detail.',
+                  style: body1,
+                  textAlign: TextAlign.center, // Center the content text
                 ),
               ],
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Stop',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
+            // --- Wrap both buttons in a Row and center the Row ---
+            Row(
+              mainAxisAlignment:
+                  MainAxisAlignment
+                      .spaceEvenly, // Distribute space evenly between and around buttons
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal:
+                          30.0, // Adjusted padding to fit well within AlertDialog
+                      vertical: 18.0, // Adjusted padding
+                    ),
+                    backgroundColor: backgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    side: const BorderSide(
+                      color: redColor, // Border color to match the button
+                      width: 3, // Border width
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(); // Close modal
+                    _forceStopAndGoBack(); // Call the function to stop the timer and go back
+                  },
+                  child: const Text(
+                    'Stop',
+                    style: headerred,
+                  ), // Changed text style for better contrast
                 ),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Tutup modal
-                _forceStopAndGoBack(); // Panggil fungsi untuk menghentikan timer dan kembali
-              },
-            ),
-            TextButton(
-              child: const Text(
-                'Continue',
-                style: TextStyle(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30.0, // Adjusted padding
+                      vertical: 18.0, // Adjusted padding
+                    ),
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(); // Close modal
+                    // Tidak perlu melakukan apa-apa lagi, timer akan terus berjalan
+                  },
+                  child: const Text('Lanjutkan', style: headerblack),
                 ),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Tutup modal
-                // Tidak perlu melakukan apa-apa lagi, timer akan terus berjalan
-              },
+              ],
             ),
           ],
         );
@@ -228,16 +340,16 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
         _currentStatus == UltradianRhythmStatus.rest) {
       stepText =
           (_currentStatus == UltradianRhythmStatus.study)
-              ? 'study time'
-              : 'rest time';
-      buttonText = 'Stop';
+              ? 'Study Time'
+              : 'Rest Time';
+      buttonText = 'Berhenti';
       onButtonPressed = _showStopMethodConfirmationModal;
       buttonColor = redColor; // Warna merah untuk tombol Stop
       buttonTextStyle = headerwhite; // Teks putih untuk tombol Stop
     } else {
       // UltradianRhythmStatus.completed
-      stepText = 'Completed Method';
-      buttonText = 'Back to Home';
+      stepText = 'Metode Selesai';
+      buttonText = 'Kembali';
       onButtonPressed = () {
         Navigator.popUntil(
           context,
@@ -254,7 +366,6 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
         backgroundColor: backgroundColor,
         automaticallyImplyLeading: false,
         elevation: 0,
-
         title: Text('${widget.methodName}', style: headerblack4),
         centerTitle: true,
       ),
