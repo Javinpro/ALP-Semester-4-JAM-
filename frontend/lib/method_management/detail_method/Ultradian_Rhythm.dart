@@ -194,7 +194,7 @@ Future<void> _showStartConfirmationModal(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 50.0, // Lebar padding horizontal
-                  vertical: 22.0, // Tinggi padding vertikal
+                  vertical: 15.0, // Tinggi padding vertikal
                 ),
                 backgroundColor: primaryColor, // Warna tombol "Start Now!"
                 shape: RoundedRectangleBorder(

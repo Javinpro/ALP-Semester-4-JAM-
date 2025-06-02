@@ -280,8 +280,8 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                     elevation: 5,
                     padding: const EdgeInsets.symmetric(
                       horizontal:
-                          30.0, // Adjusted padding to fit well within AlertDialog
-                      vertical: 18.0, // Adjusted padding
+                          20.0, // Adjusted padding to fit well within AlertDialog
+                      vertical: 15.0, // Adjusted padding
                     ),
                     backgroundColor: backgroundColor,
                     shape: RoundedRectangleBorder(
@@ -305,8 +305,8 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 30.0, // Adjusted padding
-                      vertical: 18.0, // Adjusted padding
+                      horizontal: 20.0, // Adjusted padding
+                      vertical: 15.0, // Adjusted padding
                     ),
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -374,8 +374,8 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
           children: [
             // Lingkaran Besar Timer
             Container(
-              width: 355,
-              height: 355,
+              width: 300,
+              height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(color: secondaryColor, width: 5),
