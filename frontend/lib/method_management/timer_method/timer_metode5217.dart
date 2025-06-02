@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jam/colors.dart'; // Pastikan path ini benar
 import 'package:jam/text_template.dart'; // Pastikan path ini benar
 import 'dart:async'; // Untuk Timer
-import 'package:image_picker/image_picker.dart'; // Untuk mengakses kamera (tambahkan di pubspec.yaml)
+import 'package:image_picker/image_picker.dart'; // Untuk mengakses kamera
+import 'package:vibration/vibration.dart'; // Import package vibration
 
 // Enum untuk status timer
 enum metode5217Status { study, rest, completed }
@@ -18,8 +19,9 @@ class metode5217TimerPage extends StatefulWidget {
 
 class _metode5217TimerPageState extends State<metode5217TimerPage> {
   Timer? _timer;
-  int _studyTimeInSeconds = 52 * 60;
-  int _restTimeInSeconds = 17 * 60;
+  Timer? _vibrationTimer; // Timer khusus untuk getaran berkelanjutan
+  int _studyTimeInSeconds = 52 * 60; // 25 menit untuk study time
+  int _restTimeInSeconds = 17 * 60; // 10 menit untuk rest time
   int _currentSeconds = 0;
   metode5217Status _currentStatus = metode5217Status.study;
   final ImagePicker _picker = ImagePicker(); // Instance untuk ImagePicker
@@ -45,7 +47,35 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
     });
   }
 
-  void _handleTimerCompletion() {
+  // --- Fungsi untuk memulai getaran berkelanjutan ---
+  void _vibrateContinuously() async {
+    if (await Vibration.hasVibrator() ?? false) {
+      // Cek apakah perangkat memiliki vibrator
+      // Pola: [delay, duration, delay, duration, ...]
+      // Kita buat pola looping dengan durasi getar yang cukup panjang
+      // dan delay singkat agar terasa terus menerus
+      _vibrationTimer = Timer.periodic(const Duration(milliseconds: 1000), (
+        timer,
+      ) async {
+        if (await Vibration.hasCustomVibrationsSupport() ?? false) {
+          Vibration.vibrate(
+            pattern: [0, 500],
+            repeat: -1,
+          ); // Getar 0.5 detik, ulangi terus
+        } else {
+          Vibration.vibrate(duration: 500); // Getar 0.5 detik
+        }
+      });
+    }
+  }
+
+  // --- Fungsi untuk menghentikan getaran berkelanjutan ---
+  void _stopContinuousVibration() {
+    _vibrationTimer?.cancel(); // Hentikan timer getaran
+    Vibration.cancel(); // Pastikan semua getaran yang sedang aktif dihentikan
+  }
+
+  void _handleTimerCompletion() async {
     if (_currentStatus == metode5217Status.study) {
       // Pindah ke rest time
       setState(() {
@@ -54,15 +84,20 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
       });
       _startTimer(); // Mulai timer untuk rest time
     } else if (_currentStatus == metode5217Status.rest) {
-      // Rest time selesai, tampilkan modal ambil foto
-      _timer?.cancel(); // Pastikan timer berhenti
-      _showTakeFotoModal(context);
+      // Rest time selesai
+      _timer?.cancel(); // Pastikan timer utama berhenti
+
+      // --- Mulai getaran berkelanjutan di sini ---
+      _vibrateContinuously();
+
+      _showTakeFotoModal(context); // Tampilkan modal ambil foto
     }
   }
 
   // Fungsi yang sekarang dipanggil oleh modal "Stop Method"
   void _forceStopAndGoBack() {
     _timer?.cancel();
+    _stopContinuousVibration(); // Pastikan getaran berhenti jika pengguna menghentikan manual
     setState(() {
       _currentStatus =
           metode5217Status.completed; // Atur status menjadi Completed
@@ -124,35 +159,33 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
 
   // Fungsi untuk mengambil foto
   Future<void> _takePicture() async {
+    _stopContinuousVibration(); // --- Hentikan getaran di sini ---
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
       if (image != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Foto berhasil diambil: ${image.path}')),
         );
-        // Setelah foto diambil, tampilkan modal konfirmasi berikutnya
-        _showNextCycleConfirmationModal();
+        _showNextCycleConfirmationModal(); // Tampilkan modal konfirmasi berikutnya
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Pengambilan foto dibatalkan.')),
         );
-        // Jika dibatalkan, tetap tawarkan pilihan lanjutan atau kembali
         _showNextCycleConfirmationModal(); // Masih menawarkan konfirmasi setelah pembatalan
       }
     } catch (e) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Gagal mengakses kamera: $e')));
-      // Jika ada error, tetap tawarkan pilihan lanjutan atau kembali
       _showNextCycleConfirmationModal(); // Masih menawarkan konfirmasi setelah error
     }
   }
 
-  // --- Fungsi Baru: Modal Konfirmasi Lanjutkan Siklus Timer ---
+  // Fungsi: Modal Konfirmasi Lanjutkan Siklus Timer
   Future<void> _showNextCycleConfirmationModal() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User harus berinteraksi dengan tombol
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: backgroundColor,
@@ -187,17 +220,11 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    side: const BorderSide(
-                      color: redColor,
-                      width: 3,
-                    ), // Border for "Keluar"
+                    side: const BorderSide(color: redColor, width: 3),
                   ),
                   onPressed: () {
-                    Navigator.of(dialogContext).pop(); // Tutup modal
-                    Navigator.pop(
-                      context,
-                    ); // Kembali ke halaman sebelumnya (detail method)
-                    // Set status completed jika perlu di halaman sebelumnya
+                    Navigator.of(dialogContext).pop();
+                    Navigator.pop(context);
                   },
                   child: const Text('Keluar', style: headerred),
                 ),
@@ -214,8 +241,7 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(dialogContext).pop(); // Tutup modal
-                    // Lanjutkan siklus timer
+                    Navigator.of(dialogContext).pop();
                     setState(() {
                       _currentStatus = metode5217Status.study;
                       _currentSeconds = _studyTimeInSeconds;
@@ -240,22 +266,24 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // Pastikan timer dibatalkan saat widget dihapus
+    _timer?.cancel(); // Pastikan timer utama dibatalkan
+    _vibrationTimer?.cancel(); // Pastikan timer getaran juga dibatalkan
+    Vibration.cancel(); // Hentikan getaran yang mungkin sedang aktif
     super.dispose();
   }
 
-  // --- Fungsi untuk menampilkan modal konfirmasi Stop Method ---
+  // Fungsi untuk menampilkan modal konfirmasi Stop Method
   Future<void> _showStopMethodConfirmationModal() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User harus berinteraksi dengan tombol
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           backgroundColor: backgroundColor,
           title: const Text(
             'Hentikan Metode',
             style: headerblack4,
-            textAlign: TextAlign.center, // Center the title text
+            textAlign: TextAlign.center,
           ),
           content: const SingleChildScrollView(
             child: ListBody(
@@ -263,50 +291,40 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                 Text(
                   'Dengan mengklik lanjutkan untuk meneruskan metode atau klik berhenti untuk kembali ke metode detail.',
                   style: body1,
-                  textAlign: TextAlign.center, // Center the content text
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
           actions: <Widget>[
-            // --- Wrap both buttons in a Row and center the Row ---
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment
-                      .spaceEvenly, // Distribute space evenly between and around buttons
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
                     padding: const EdgeInsets.symmetric(
-                      horizontal:
-                          20.0, // Adjusted padding to fit well within AlertDialog
-                      vertical: 15.0, // Adjusted padding
+                      horizontal: 20.0,
+                      vertical: 15.0,
                     ),
                     backgroundColor: backgroundColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    side: const BorderSide(
-                      color: redColor, // Border color to match the button
-                      width: 3, // Border width
-                    ),
+                    side: const BorderSide(color: redColor, width: 3),
                   ),
                   onPressed: () {
-                    Navigator.of(dialogContext).pop(); // Close modal
-                    _forceStopAndGoBack(); // Call the function to stop the timer and go back
+                    Navigator.of(dialogContext).pop();
+                    _forceStopAndGoBack();
                   },
-                  child: const Text(
-                    'Stop',
-                    style: headerred,
-                  ), // Changed text style for better contrast
+                  child: const Text('Stop', style: headerred),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 5,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, // Adjusted padding
-                      vertical: 15.0, // Adjusted padding
+                      horizontal: 20.0,
+                      vertical: 15.0,
                     ),
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -314,8 +332,7 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(dialogContext).pop(); // Close modal
-                    // Tidak perlu melakukan apa-apa lagi, timer akan terus berjalan
+                    Navigator.of(dialogContext).pop();
                   },
                   child: const Text('Lanjutkan', style: headerblack),
                 ),
@@ -332,8 +349,8 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
     String stepText;
     String buttonText;
     VoidCallback? onButtonPressed;
-    Color buttonColor; // Variabel baru untuk warna tombol
-    TextStyle buttonTextStyle; // Variabel baru untuk style teks tombol
+    Color buttonColor;
+    TextStyle buttonTextStyle;
 
     if (_currentStatus == metode5217Status.study ||
         _currentStatus == metode5217Status.rest) {
@@ -343,20 +360,16 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
               : 'Rest Time';
       buttonText = 'Berhenti';
       onButtonPressed = _showStopMethodConfirmationModal;
-      buttonColor = redColor; // Warna merah untuk tombol Stop
-      buttonTextStyle = headerwhite; // Teks putih untuk tombol Stop
+      buttonColor = redColor;
+      buttonTextStyle = headerwhite;
     } else {
-      // metode5217Status.completed
       stepText = 'Metode Selesai';
       buttonText = 'Kembali';
       onButtonPressed = () {
-        Navigator.popUntil(
-          context,
-          (route) => route.isFirst,
-        ); // Kembali ke root (MethodPage)
+        Navigator.popUntil(context, (route) => route.isFirst);
       };
-      buttonColor = primaryColor; // Warna utama untuk tombol Back to Home
-      buttonTextStyle = headerblack; // Teks hitam untuk tombol Back to Home
+      buttonColor = primaryColor;
+      buttonTextStyle = headerblack;
     }
 
     return Scaffold(
@@ -408,8 +421,7 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
               height: 55,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      buttonColor, // Gunakan warna tombol yang ditentukan
+                  backgroundColor: buttonColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -417,10 +429,7 @@ class _metode5217TimerPageState extends State<metode5217TimerPage> {
                   shadowColor: secondaryColor.withOpacity(0.4),
                 ),
                 onPressed: onButtonPressed,
-                child: Text(
-                  buttonText,
-                  style: buttonTextStyle,
-                ), // Gunakan style teks tombol yang ditentukan
+                child: Text(buttonText, style: buttonTextStyle),
               ),
             ),
           ],
