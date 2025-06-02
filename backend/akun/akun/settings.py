@@ -82,23 +82,23 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'ALP_Semester_4',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',  # atau IP/hostname MySQL server
-#         'PORT': '3306',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ALP_Semester_4',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # atau IP/hostname MySQL server
+        'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': ':memory:',
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
