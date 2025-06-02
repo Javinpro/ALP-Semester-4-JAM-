@@ -1,84 +1,156 @@
-import unittest
-from unittest.mock import patch, MagicMock
-from rest_framework.test import APIRequestFactory
-from rest_framework.request import Request
-from rest_framework.response import Response
+from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
+from django.contrib.auth.models import User
+from tasks.models import Task, TaskPost, TaskAnswer, UserProfile
+from django.urls import reverse
+from datetime import datetime, timedelta
+from io import BytesIO
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
-from rest_framework.test import force_authenticate
-from tasks.views import TaskViewSet, TaskPostViewSet, TaskAnswerViewSet
+from django.utils import timezone
 
 User = get_user_model()
 
+class TaskAPITest(APITestCase):
 
-class TaskViewSetTestCase(unittest.TestCase):
     def setUp(self):
-        self.factory = APIRequestFactory()
-        self.user = MagicMock()
-        self.user.is_authenticated = True
+        self.client = APIClient()
 
-        self.task_mock = MagicMock()
-        self.task_mock.in_todolist = False
-        self.task_mock.is_completed = False
+        self.user = User.objects.create_user(username='user1', password='pass')
+        self.user2 = User.objects.create_user(username='user2', password='pass')
 
-    @patch('tasks.views.TaskViewSet.get_object')
-    def test_add_to_todolist(self, mock_get_object):
-        request = self.factory.post('/tasks/1/add_to_todolist/')
-        force_authenticate(request, user=self.user)
-        mock_get_object.return_value = self.task_mock
+        self.client.force_authenticate(user=self.user)
 
-        view = TaskViewSet.as_view({'post': 'add_to_todolist'})
-        response = view(request, pk=1)
+        self.profile1 = UserProfile.objects.get(user=self.user)
+        self.profile2 = UserProfile.objects.get(user=self.user2)
 
+        self.task = Task.objects.create(
+            user=self.user,
+            title='Test Task',
+            description='Some desc',
+            deadline=timezone.now() + timedelta(days=1)
+        )
+
+    def test_create_task(self):
+        url = reverse('task-list')
+        data = {
+            'title': 'New Task',
+            'description': 'Description',
+            'deadline': (datetime.now() + timedelta(days=1)).isoformat()
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_add_to_todolist(self):
+        url = reverse('task-add-to-todolist', args=[self.task.id])
+        response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['status'], 'Task ditambahkan ke ToDoList')
-        self.assertTrue(self.task_mock.in_todolist)
-        self.task_mock.save.assert_called_once()
+        self.task.refresh_from_db()
+        self.assertTrue(self.task.in_todolist)
 
-    @patch('tasks.views.TaskViewSet.get_object')
-    def test_complete_success(self, mock_get_object):
-        request = self.factory.post('/tasks/1/complete/')
-        force_authenticate(request, user=self.user)
-        self.task_mock.in_todolist = True
-        mock_get_object.return_value = self.task_mock
+    def test_complete_task_without_adding(self):
+        url = reverse('task-complete', args=[self.task.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
 
-        view = TaskViewSet.as_view({'post': 'complete'})
-        response = view(request, pk=1)
-
+    def test_complete_task(self):
+        self.task.in_todolist = True
+        self.task.save()
+        url = reverse('task-complete', args=[self.task.id])
+        response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['status'], 'Task diselesaikan')
-        self.assertTrue(self.task_mock.is_completed)
-        self.assertFalse(self.task_mock.in_todolist)
-        self.task_mock.save.assert_called_once()
+        self.task.refresh_from_db()
+        self.assertTrue(self.task.is_completed)
+        self.assertFalse(self.task.in_todolist)
 
+    def test_task_post_creation_and_query(self):
+        url = reverse('taskpost-list')
+        new_task = Task.objects.create(
+            user=self.user,
+            title='Task to Post',
+            description='...',
+            deadline=timezone.now() + timedelta(days=1)
+        )
 
-class TaskPostViewSetTestCase(unittest.TestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.user = MagicMock()
-        self.user.is_authenticated = True
-        self.task_mock = MagicMock()
-        self.post_mock = MagicMock()
-        self.answer_mock = MagicMock()
-        self.profile_mock = MagicMock()
+        data = {
+            'task': new_task.id,
+            'difficulty': 'mudah',
+            'comment': 'Contoh komentar',
+            'details': 'Deskripsi postingan tugas',
+        }
 
-    @patch('tasks.views.TaskPostViewSet.get_object')
-    @patch('tasks.views.TaskAnswer.objects.get')
-    @patch('tasks.views.UserProfile.objects.get_or_create')
-    def test_approve_answer_success(self, mock_get_or_create, mock_answer_get, mock_get_object):
-        request = self.factory.post('/task-posts/1/approve_answer/', {'answer_id': 123}, format='json')
-        force_authenticate(request, user=self.user)
-        self.post_mock.task.user = self.user
-        self.answer_mock.user = MagicMock()
-        self.answer_mock.user != self.user
-        mock_get_object.return_value = self.post_mock
-        mock_answer_get.return_value = self.answer_mock
-        mock_get_or_create.return_value = (self.profile_mock, True)
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Task.objects.get(id=new_task.id).is_posted)
 
-        view = TaskPostViewSet.as_view({'post': 'approve_answer'})
-        response = view(request, pk=1)
-
+        response = self.client.get(url, {'mine': 'true'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['status'], 'Jawaban disetujui & poin diberikan')
-        self.post_mock.save.assert_called_once()
-        self.profile_mock.save.assert_called_once()
-        self.profile_mock.update_rank.assert_called_once()
+        self.assertEqual(len(response.data), 1)
+
+
+    def test_task_post_answers_and_approval(self):
+        post = TaskPost.objects.create(task=self.task, difficulty='mudah')
+        answer = TaskAnswer.objects.create(post=post, user=self.user2, details='Jawaban')
+
+        url = reverse('taskpost-approve-answer', args=[post.id])
+        response = self.client.post(url, {'answer_id': answer.id})
+        self.assertEqual(response.status_code, 200)
+
+        task2 = Task.objects.create(
+            user=self.user,
+            title='Task 2',
+            description='...',
+            deadline=timezone.now() + timedelta(days=1)
+        )
+        post2 = TaskPost.objects.create(task=task2, difficulty='mudah')
+        answer2 = TaskAnswer.objects.create(post=post2, user=self.user, details='My own answer')
+
+        response = self.client.post(
+            reverse('taskpost-approve-answer', args=[post2.id]),
+            {'answer_id': answer2.id}
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_view_answers_only_by_owner(self):
+        post = TaskPost.objects.create(task=self.task, difficulty='mudah')
+        TaskAnswer.objects.create(post=post, user=self.user2, details='Test')
+
+        url = reverse('taskpost-answers', args=[post.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertGreaterEqual(len(response.data), 1)
+
+    def test_available_tasks(self):
+        url = reverse('taskpost-available-tasks')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertGreaterEqual(len(response.data), 1)
+
+    def test_answer_creation(self):
+        TaskPost.objects.create(task=self.task, difficulty='mudah')
+        self.client.force_authenticate(user=self.user2)
+        url = reverse('taskanswer-list')
+        file = SimpleUploadedFile("file.txt", b"file_content")
+
+        response = self.client.post(url, {
+            'post': TaskPost.objects.first().id,
+            'details': 'Jawaban saya',
+            'file': file
+        }, format='multipart')
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(TaskAnswer.objects.count(), 1)
+
+    def test_doing_answers(self):
+        post = TaskPost.objects.create(task=self.task, difficulty='mudah')
+        TaskAnswer.objects.create(post=post, user=self.user, details='My answer')
+        url = reverse('taskanswer-doing')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_view(self):
+        url = reverse('user-profile')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("rank", response.data)
