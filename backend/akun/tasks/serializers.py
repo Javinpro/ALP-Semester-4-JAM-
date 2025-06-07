@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, TaskAnswer, TaskPost, UserProfile
+from .models import DoingTask, Task, TaskAnswer, TaskPost, UserProfile
 from datetime import datetime
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -14,6 +14,8 @@ class TaskSerializer(serializers.ModelSerializer):
         return value
 
 class TaskPostSerializer(serializers.ModelSerializer):
+    task_owner = serializers.CharField(source='task.user.username', read_only=True)
+    task_id = serializers.IntegerField(source='task.id', read_only=True)
     class Meta:
         model = TaskPost
         fields = '__all__'
@@ -21,6 +23,10 @@ class TaskPostSerializer(serializers.ModelSerializer):
 
     def validate_task(self, value):
         request = self.context['request']
+
+        if self.instance:
+            return value
+        
         if value.user != request.user:
             raise serializers.ValidationError("Kamu hanya bisa mem-post task milikmu sendiri.")
         if value.is_posted:
@@ -44,4 +50,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ['points', 'rank']
 
-
+class DoingTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoingTask
+        fields = ['id', 'post', 'started_at']

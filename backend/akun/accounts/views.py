@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from django.contrib.auth import get_user_model
-from .serializers import RegisterSerializer, ProfileSerializer
+from backend.akun.tasks.models import UserProfile
+from .serializers import RegisterSerializer, ProfileSerializer, UserProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -45,3 +46,19 @@ class ProfileDetailView(RetrieveAPIView):
     def get_object(self):
         return self.request.user
     
+class UnifiedProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+
+        user_data = ProfileSerializer(user).data
+        profile_data = UserProfileSerializer(profile).data
+
+        combined_data = {
+            **user_data,
+            **profile_data  # merge rank & points ke dalam response
+        }
+
+        return Response(combined_data)

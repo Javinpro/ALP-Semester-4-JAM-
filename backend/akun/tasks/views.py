@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from accounts import serializers
-from .models import Task, TaskPost, TaskAnswer, Task, UserProfile
+from .models import DoingTask, Task, TaskPost, TaskAnswer, Task, UserProfile
 from .serializers import TaskSerializer, TaskPostSerializer, TaskAnswerSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from tasks.models import UserProfile
 import sentry_sdk
+from django.utils.timezone import now
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
@@ -60,6 +61,12 @@ class TaskPostViewSet(viewsets.ModelViewSet):
         task.save()
         serializer.save()
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.task.user != request.user:
+            return Response({"error": "Bukan post tugas milikmu"}, status=403)
+        return super().update(request, *args, **kwargs)
+
     def get_queryset(self):
         user = self.request.user
         mine = self.request.query_params.get('mine')
@@ -75,7 +82,7 @@ class TaskPostViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         obj = super().get_object()
-        return obj  # validasi spesifik dilakukan di tiap action
+        return obj
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def approve_answer(self, request, pk=None):
@@ -152,7 +159,29 @@ class TaskAnswerViewSet(viewsets.ModelViewSet):
         post = serializer.validated_data['post']
         if post.task.user == self.request.user:
             raise serializers.ValidationError("Kamu tidak bisa menjawab tugasmu sendiri.")
+        if not DoingTask.objects.filter(user=self.request.user, post=post).exists():
+            raise serializers.ValidationError("Kamu harus mulai mengerjakan task ini terlebih dahulu.")
         serializer.save(user=self.request.user)
+    
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
+    def start(self, request):
+        post_id = request.data.get('post')
+        if not post_id:
+            return Response({"error": "post ID harus disediakan"}, status=400)
+
+        try:
+            post = TaskPost.objects.get(pk=post_id)
+        except TaskPost.DoesNotExist:
+            return Response({"error": "TaskPost tidak ditemukan"}, status=404)
+
+        if post.task.user == request.user:
+            return Response({"error": "Kamu tidak bisa mengerjakan tugasmu sendiri."}, status=400)
+
+        doing, created = DoingTask.objects.get_or_create(user=request.user, post=post)
+        if not created:
+            return Response({"status": "Sudah pernah memulai task ini"}, status=200)
+
+        return Response({"status": "Berhasil memulai pengerjaan task", "doing_id": doing.id})
     
     @action(detail=False, methods=['get'])
     def doing(self, request):
@@ -181,3 +210,37 @@ class UserProfileView(APIView):
             })
         except UserProfile.DoesNotExist:
             return Response({"error": "Profile tidak ditemukan"}, status=404)
+        
+class TaskStatistikView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            if request.user.is_anonymous:
+                return Response({'error': 'Authentication required'}, status=401)
+
+            today = now().date()
+            start_week = today - timedelta(days=today.weekday())
+            start_month = today.replace(day=1)
+
+            weekly_completed = Task.objects.filter(
+                user=request.user,
+                selesai=True,
+                created_at__date__gte=start_week
+            ).count()
+
+            monthly_completed = Task.objects.filter(
+                user=request.user,
+                selesai=True,
+                created_at__date__gte=start_month
+            ).count()
+
+            return Response({
+                'weekly_completed': weekly_completed,
+                'monthly_completed': monthly_completed
+            })
+
+        except Exception as e:
+            sentry_sdk.set_user({"username": str(request.user)})
+            sentry_sdk.capture_exception(e)
+            return Response({'error': 'Failed to fetch statistics'}, status=500)
