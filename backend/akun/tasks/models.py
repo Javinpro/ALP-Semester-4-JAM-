@@ -48,3 +48,10 @@ class UserProfile(models.Model):
             self.points = self.points % 100
             self.save()
 
+class DoingTask(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(TaskPost, on_delete=models.CASCADE)
+    started_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')
