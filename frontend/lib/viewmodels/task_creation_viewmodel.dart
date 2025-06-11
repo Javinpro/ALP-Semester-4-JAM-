@@ -31,16 +31,19 @@ class TaskCreationViewModel extends StateNotifier<Task> {
     this._imagePicker,
     this._taskService,
     this._postedTasksNotifier,
-  ) : super(
-        Task.createNew(userId: '', taskName: '', deadline: DateTime.now()),
-      ); // Initial dummy task
+  ) : super(Task.createNew(userId: '', taskName: '', deadline: DateTime.now()));
 
-  void initializeNewTask() {
-    state = Task.createNew(
-      userId: _authService.getCurrentUserId(),
-      taskName: '',
-      deadline: DateTime.now().add(const Duration(hours: 1)),
-    );
+  Future<void> initializeNewTask() async {
+    final userId = await _authService.getCurrentUserId();
+    if (userId != null) {
+      state = Task.createNew(
+        userId: userId,
+        taskName: '',
+        deadline: DateTime.now().add(const Duration(hours: 1)),
+      );
+    } else {
+      print('Error: userId null saat inisialisasi task');
+    }
   }
 
   void updateTaskName(String name) {
@@ -55,12 +58,12 @@ class TaskCreationViewModel extends StateNotifier<Task> {
     try {
       final XFile? image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
-      ); // Atau .camera
+      );
       if (image != null) {
         state = state.copyWith(photoPath: image.path);
       }
     } catch (e) {
-      print('Error picking image: $e'); // Handle error in UI
+      print('Error picking image: $e');
     }
   }
 
@@ -72,15 +75,14 @@ class TaskCreationViewModel extends StateNotifier<Task> {
     state = state.copyWith(description: description);
   }
 
-  void postTask() {
+  Future<void> postTask() async {
     if (state.taskName.isNotEmpty && state.deadline.isAfter(DateTime.now())) {
       _taskService.addTask(state);
-      _postedTasksNotifier.refreshTasks(); // Refresh list setelah post
-      // Reset state atau arahkan pengguna kembali ke halaman daftar
-      initializeNewTask(); // Reset untuk task berikutnya
+      _postedTasksNotifier.refreshTasks();
+      await initializeNewTask();
     } else {
-      // Handle validation error
       print("Task name and deadline are required.");
     }
   }
 }
+
