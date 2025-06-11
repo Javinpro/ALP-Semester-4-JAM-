@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from backend.akun.tasks.models import UserProfile
+from tasks.models import UserProfile
 
 User = get_user_model()
 

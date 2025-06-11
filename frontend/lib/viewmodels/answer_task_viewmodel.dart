@@ -21,19 +21,26 @@ class AnswerTaskViewModel extends StateNotifier<Answer?> {
   final ImagePicker _imagePicker;
 
   AnswerTaskViewModel(
-    this._taskId,
-    this._authService,
-    this._taskService,
-    this._imagePicker,
-  ) : super(null) {
-    // Initial state: create a new answer object for the given task
+  this._taskId,
+  this._authService,
+  this._taskService,
+  this._imagePicker,
+) : super(null) {
+  _initializeAnswer();
+}
+
+Future<void> _initializeAnswer() async {
+  final userId = await _authService.getCurrentUserId();
+  if (userId != null) {
     state = Answer.createNew(
       taskId: _taskId,
-      userId: _authService.getCurrentUserId(),
-      photoPath: '', // Placeholder
-      description: '', // Placeholder
+      userId: userId,
+      photoPath: '',
+      description: '',
     );
   }
+}
+
 
   void updatePhotoPath(String path) {
     if (state != null) {
@@ -75,7 +82,7 @@ class AnswerTaskViewModel extends StateNotifier<Answer?> {
       final task = _taskService.getTaskById(_taskId);
       if (task != null) {
         _taskService.updateTask(
-          task.copyWith(assignedToUserId: _authService.getCurrentUserId()),
+          task.copyWith(assignedToUserId: await _authService.getCurrentUserId()),
         );
         // Note: The task is still visible in "Doing" until approved by the task owner.
       }

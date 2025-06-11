@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from django.contrib.auth import get_user_model
-from backend.akun.tasks.models import UserProfile
+from tasks.models import UserProfile
 from .serializers import RegisterSerializer, ProfileSerializer, UserProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response

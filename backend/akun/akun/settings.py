@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'rest_framework',
     'tasks',
-    'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
