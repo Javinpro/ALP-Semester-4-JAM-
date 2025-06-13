@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/services/auth_service.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:jam/view/pages/task_creation_page.dart';
 import 'package:jam/view/widgets/task_card.dart';
 import 'package:jam/viewmodels/task_list_viewmodel.dart';
@@ -102,18 +102,18 @@ class PostedTasksPage extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const TaskCreationPage()),
-          );
-        },
-        label: const Text('Post Your Task', style: headerwhite),
-        icon: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: secondaryColor,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const TaskCreationPage()),
+      //     );
+      //   },
+      //   label: const Text('Post Your Task', style: headerwhite),
+      //   icon: const Icon(Icons.add, color: Colors.white),
+      //   backgroundColor: secondaryColor,
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

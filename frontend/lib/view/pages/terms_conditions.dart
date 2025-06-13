@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/view/pages/register.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
 
 class TermsConditions extends StatelessWidget {
   const TermsConditions({super.key});

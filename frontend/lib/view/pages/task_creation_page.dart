@@ -2,8 +2,8 @@ import 'dart:io'; // Untuk File
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:jam/view/widgets/colors.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:jam/models/task_difficulty.dart';
 import 'package:jam/viewmodels/task_creation_viewmodel.dart';
 

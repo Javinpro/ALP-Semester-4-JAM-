@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 
 int bar_1 = 7;
 int bar_2 = 4;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/services/auth_service.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:jam/view/widgets/task_card.dart';
 import 'package:jam/viewmodels/task_list_viewmodel.dart';
 

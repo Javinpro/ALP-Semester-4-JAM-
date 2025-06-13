@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart'; // Sesuaikan
-import 'package:jam/view/widgets/text_template.dart'; // Sesuaikan
+import 'package:jam/view/utils/colors.dart'; // Sesuaikan
+import 'package:jam/view/utils/text_template.dart'; // Sesuaikan
 
 class CustomAlertDialog extends StatelessWidget {
   final String title;

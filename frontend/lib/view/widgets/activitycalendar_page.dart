@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'calendar_widget.dart';
 import '../pages/status_card.dart'; // <- import the new file
 

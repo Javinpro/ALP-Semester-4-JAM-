@@ -1,12 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jam/view/widgets/colors.dart';
-import 'package:jam/view/widgets/custom_text_field.dart';
-import 'package:jam/view/pages/edit_profile.dart';
-import 'package:jam/view/pages/login.dart';
-import 'package:jam/view/widgets/text_template.dart';
-import 'package:jam/services/auth_service.dart';
-import 'package:jam/viewmodels/profile_provider.dart'; // tempat userProfileProvider
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});

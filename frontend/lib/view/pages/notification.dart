@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
 
 /// Kelas data untuk merepresentasikan satu item notifikasi.
 /// Ini akan membuat kode Anda lebih rapi dan mudah dikelola.

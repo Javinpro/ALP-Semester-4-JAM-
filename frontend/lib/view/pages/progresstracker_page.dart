@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 
 import '../widgets/chart_widget.dart';
 import 'status_card.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 
 class TaskpostPage extends StatelessWidget {
   const TaskpostPage({super.key});

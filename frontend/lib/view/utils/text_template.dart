@@ -1,61 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 
 // Text Section
 const headerblack = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 18,
   fontWeight: FontWeight.w700,
   color: secondaryColor,
 );
 const headerwhite = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 18,
   fontWeight: FontWeight.w700,
   color: backgroundColor,
 );
 const headergrey = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 18,
   fontWeight: FontWeight.w700,
   color: greyColor,
 );
 const headergrey2 = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 15,
   fontWeight: FontWeight.w500,
   color: greyColor,
 );
 
 const headerblack2 = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 15,
   fontWeight: FontWeight.w700,
   color: secondaryColor,
 );
 const headerblack3 = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 25,
   fontWeight: FontWeight.w700,
   color: secondaryColor,
 );
 const headerblack4 = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 35,
   fontWeight: FontWeight.w700,
   color: secondaryColor,
 );
+const headerblack5 = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 60,
+  fontWeight: FontWeight.w600,
+  color: secondaryColor,
+);
 const body1 = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 18,
   fontWeight: FontWeight.w500,
   color: secondaryColor,
 );
 const body2 = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 15,
   fontWeight: FontWeight.w500,
   color: secondaryColor,
 );
 
 const headeryellow = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 15,
   fontWeight: FontWeight.w700,
   color: primaryColor,
 );
 
 const headerred = TextStyle(
+  fontFamily: 'Poppins',
   fontSize: 18,
   fontWeight: FontWeight.w700,
   color: redColor,
