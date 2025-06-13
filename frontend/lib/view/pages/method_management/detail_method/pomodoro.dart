@@ -1,45 +1,73 @@
+// view/pages/method_management/detail_method/pomodoro.dart
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Tambahkan ini
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/view/pages/method_management/timer_method/timer_podomoro.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
+import 'package:jam/models/method.dart';
+import 'package:jam/viewmodels/pomodoro_timer_viewmodel.dart'; // Import ViewModel
 
 class PomodoroDetailPage extends StatelessWidget {
   final String title;
   final String title2;
+  final String title3;
   final String imagePath;
 
   const PomodoroDetailPage({
     super.key,
     required this.title,
     required this.title2,
+    required this.title3,
     required this.imagePath,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Dapatkan ukuran layar
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final textScaleFactor = MediaQuery.of(
+      context,
+    ).textScaler.scale(1.0); // Dapatkan faktor skala teks
+
+    final method = Method.defaultMethods.firstWhere((m) => m.title == title);
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: backgroundColor,
         elevation: 0,
-        title: Text(title, style: headerblack4),
+        title: Text(
+          title,
+          style: headerblack4.copyWith(
+            fontSize:
+                headerblack4.fontSize! *
+                textScaleFactor, // Skalakan font judul AppBar
+          ),
+        ),
         leading: Padding(
-          padding: const EdgeInsets.all(6.0),
+          padding: EdgeInsets.all(screenWidth * 0.015), // Responsif padding
           child: Container(
             decoration: BoxDecoration(
               color: primaryColor,
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(
+                screenWidth * 0.025,
+              ), // Responsif border radius
               boxShadow: [
                 BoxShadow(
                   color: secondaryColor.withOpacity(0.3),
-                  spreadRadius: 0, // Seberapa jauh bayangan menyebar
-                  blurRadius: 6, // Seberapa buram bayangan
-                  offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
+                  spreadRadius: screenWidth * 0.00,
+                  blurRadius: screenWidth * 0.015,
+                  offset: Offset(0, screenWidth * 0.0075),
                 ),
               ],
             ),
             child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: secondaryColor),
+              icon: Icon(
+                Icons.arrow_back,
+                color: secondaryColor,
+                size: screenWidth * 0.06, // Responsif ukuran icon
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -47,179 +75,179 @@ class PomodoroDetailPage extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            padding: const EdgeInsets.only(
-              left: 10.0,
-              right: 10.0,
-              top: 10.0,
-              bottom: 25.0,
+      body: Column(
+        // Ubah body menjadi Column
+        children: [
+          Expanded(
+            // Bungkus SingleChildScrollView dengan Expanded
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(screenWidth * 0.05), // Responsif padding
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        screenWidth * 0.025,
+                      ), // Responsif border radius
+                      child: Image.asset(
+                        imagePath,
+                        width: screenWidth * 0.9, // Responsif lebar gambar
+                        height: screenHeight * 0.25, // Responsif tinggi gambar
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => Icon(
+                              Icons.error,
+                              size: screenWidth * 0.35,
+                            ), // Responsif ukuran icon error
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.02,
+                  ), // Responsif tinggi SizedBox (dulu 20)
+                  Text(
+                    title3,
+                    style: headerblack.copyWith(
+                      fontSize:
+                          headerblack.fontSize! *
+                          textScaleFactor, // Skalakan font
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.01,
+                  ), // Responsif tinggi SizedBox (dulu sizedbox5)
+                  Text(
+                    method.description,
+                    style: body2.copyWith(
+                      color: Colors.black87,
+                      fontSize:
+                          body2.fontSize! * textScaleFactor, // Skalakan font
+                    ),
+                  ),
+                  // SizedBox(height: screenHeight * 0.03), // Hapus SizedBox ini jika tidak diperlukan di sini (dulu sizedbox4)
+                ],
+              ),
             ),
-            decoration: BoxDecoration(
-              color: backgroundColor, // Slightly transparent white
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: secondaryColor.withOpacity(0.3),
-                  spreadRadius: 0, // Seberapa jauh bayangan menyebar
-                  blurRadius: 6, // Seberapa buram bayangan
-                  offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
+          ),
+          // Tempatkan tombol di luar SingleChildScrollView, di bagian bawah Column utama
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.05,
+              vertical: screenHeight * 0.02,
+            ), // Tambahkan padding untuk tombol
+            child: SizedBox(
+              width: double.infinity,
+              height: screenHeight * 0.07, // Responsif tinggi tombol
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      screenWidth * 0.04,
+                    ), // Responsif border radius tombol
+                  ),
+                  elevation: screenWidth * 0.02, // Responsif elevation
                 ),
-              ],
+                onPressed:
+                    () => _showStartConfirmationDialog(context, method.id),
+                child: Text(
+                  'Coba deh!',
+                  style: headerblack.copyWith(
+                    fontSize:
+                        headerblack.fontSize! *
+                        textScaleFactor, // Skalakan font tombol
+                  ),
+                ),
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: Image.asset(
-                    imagePath,
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: double.infinity,
-                        height: 200,
-                        color: Colors.grey[300],
-                        child: const Icon(
-                          Icons.broken_image,
-                          color: Colors.grey,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showStartConfirmationDialog(BuildContext context, String methodName) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final textScaleFactor = MediaQuery.of(context).textScaler.scale(1.0);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(screenWidth * 0.05),
+          ),
+          title: Text(
+            'Betulan nih mau mulai ${title}?',
+            style: headerblack3.copyWith(
+              fontSize: headerblack3.fontSize! * textScaleFactor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Setelah kamu klik tombol dibawah, timernya akan secara otomatis berjalan...',
+                style: body2.copyWith(
+                  fontSize: body2.fontSize! * textScaleFactor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: screenHeight * 0.02),
+            ],
+          ),
+          actions: <Widget>[
+            Center(
+              child: Consumer(
+                // Tambahkan Consumer untuk mengakses Riverpod
+                builder: (context, ref, child) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.12,
+                        vertical: screenHeight * 0.02,
+                      ),
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          screenWidth * 0.025,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                      // Panggil startTimer dari ViewModel
+                      ref
+                          .read(
+                            pomodoroTimerViewModelProvider(methodName).notifier,
+                          )
+                          .startTimer();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  PomodoroTimerPage(methodId: methodName),
                         ),
                       );
                     },
-                  ),
-                ),
-                const SizedBox(height: 20.0),
-
-                // Tambahkan konten step disini.
-                Text(
-                  title2,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 10.0),
-                _buildStepText(
-                  '1. Fokus sepenuhnya pada tugas tanpa gangguan selama 25 menit.',
-                ),
-                _buildStepText(
-                  '2. Gunakan waktu istirahat 10 menit untuk meregangkan tubuh, minum air, atau melakukan aktivitas santai.',
-                ),
-                _buildStepText('3. Ulangi proses sampai tugas selesai.'),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-        child: SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+                    child: Text(
+                      'Iyaa!',
+                      style: headerblack.copyWith(
+                        fontSize: headerblack.fontSize! * textScaleFactor,
+                      ),
+                    ),
+                  );
+                },
               ),
-              elevation: 4, // Tambahkan efek bayangan
             ),
-            onPressed: () {
-              _showStartConfirmationModal(context, title); // Panggil modal
-            },
-            child: Text(
-              'Mulai Sekarang',
-              style: headerblack, // Gunakan style teks Anda
-            ),
-          ),
-        ),
-      ),
+          ],
+        );
+      },
     );
   }
-
-  Widget _buildStepText(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(width: 8.0),
-          Expanded(child: Text(text, style: body2)),
-        ],
-      ),
-    );
-  }
-}
-
-// --- Fungsi baru untuk menampilkan modal konfirmasi ---
-Future<void> _showStartConfirmationModal(
-  BuildContext context,
-  String methodName,
-) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: true, // User bisa menutup modal dengan tap di luar
-    builder: (BuildContext dialogContext) {
-      return AlertDialog(
-        backgroundColor: backgroundColor,
-        title: Text(
-          'Apakah kamu siap?',
-          style: headerblack4,
-          textAlign: TextAlign.center, // <--- Menengahkan judul
-        ),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Center(
-                // <--- Memastikan konten utama di tengah
-                child: Text(
-                  'Dengan mengklik mulai, penghitung waktu metode ini akan secara otomatis dimulai',
-                  style: headergrey2,
-                  textAlign:
-                      TextAlign.center, // <--- Menengahkan teks di dalam Center
-                ),
-              ),
-              sizedbox4,
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          // Menggunakan Center atau Align untuk menengahkan tombol di bagian actions
-          Center(
-            // <--- Memastikan tombol di tengah
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 50.0, // Lebar padding horizontal
-                  vertical: 15.0, // Tinggi padding vertikal
-                ),
-                backgroundColor: primaryColor, // Warna tombol "Start Now!"
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Tutup modal
-                Navigator.pushReplacement(
-                  // Navigasi ke halaman timer
-                  context,
-                  MaterialPageRoute(
-                    // Pastikan Anda meneruskan `methodName` ke halaman timer
-                    builder:
-                        (context) => PomodoroTimerPage(methodName: methodName),
-                  ),
-                );
-              },
-              child: const Text('Ayo mulai!', style: headerblack),
-            ),
-          ),
-        ],
-      );
-    },
-  );
 }

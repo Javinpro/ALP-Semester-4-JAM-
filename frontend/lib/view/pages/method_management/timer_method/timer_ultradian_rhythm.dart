@@ -1,402 +1,179 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart'; // Pastikan path ini benar
-import 'package:jam/view/widgets/text_template.dart'; // Pastikan path ini benar
-import 'dart:async'; // Untuk Timer
-import 'package:image_picker/image_picker.dart'; // Untuk mengakses kamera
-import 'package:vibration/vibration.dart'; // Import package vibration
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
+import 'package:jam/models/timer_status.dart';
+import 'package:jam/viewmodels/ultradian_rhythm_timer_viewmodel.dart'; // Import ViewModel
 
-// Enum untuk status timer
-enum UltradianRhythmStatus { study, rest, completed }
+class UltradianRhythmTimerPage extends ConsumerWidget {
+  final String methodId;
 
-class UltradianRhythmTimerPage extends StatefulWidget {
-  final String methodName;
-
-  const UltradianRhythmTimerPage({super.key, required this.methodName});
+  const UltradianRhythmTimerPage({super.key, required this.methodId});
 
   @override
-  State<UltradianRhythmTimerPage> createState() =>
-      _UltradianRhythmTimerPageState();
-}
-
-class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
-  Timer? _timer;
-  Timer? _vibrationTimer; // Timer khusus untuk getaran berkelanjutan
-  int _studyTimeInSeconds = 90 * 60; // 25 menit untuk study time
-  int _restTimeInSeconds = 30 * 60; // 10 menit untuk rest time
-  int _currentSeconds = 0;
-  UltradianRhythmStatus _currentStatus = UltradianRhythmStatus.study;
-  final ImagePicker _picker = ImagePicker(); // Instance untuk ImagePicker
-
-  @override
-  void initState() {
-    super.initState();
-    _currentSeconds = _studyTimeInSeconds; // Mulai dengan waktu study
-    _startTimer();
-  }
-
-  void _startTimer() {
-    _timer?.cancel(); // Pastikan timer sebelumnya dihentikan
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_currentSeconds == 0) {
-        _timer?.cancel(); // Hentikan timer saat waktu habis
-        _handleTimerCompletion();
-      } else {
-        setState(() {
-          _currentSeconds--;
-        });
-      }
-    });
-  }
-
-  // --- Fungsi untuk memulai getaran berkelanjutan ---
-  void _vibrateContinuously() async {
-    if (await Vibration.hasVibrator() ?? false) {
-      // Cek apakah perangkat memiliki vibrator
-      // Pola: [delay, duration, delay, duration, ...]
-      // Kita buat pola looping dengan durasi getar yang cukup panjang
-      // dan delay singkat agar terasa terus menerus
-      _vibrationTimer = Timer.periodic(const Duration(milliseconds: 1000), (
-        timer,
-      ) async {
-        if (await Vibration.hasCustomVibrationsSupport() ?? false) {
-          Vibration.vibrate(
-            pattern: [0, 500],
-            repeat: -1,
-          ); // Getar 0.5 detik, ulangi terus
-        } else {
-          Vibration.vibrate(duration: 500); // Getar 0.5 detik
-        }
-      });
-    }
-  }
-
-  // --- Fungsi untuk menghentikan getaran berkelanjutan ---
-  void _stopContinuousVibration() {
-    _vibrationTimer?.cancel(); // Hentikan timer getaran
-    Vibration.cancel(); // Pastikan semua getaran yang sedang aktif dihentikan
-  }
-
-  void _handleTimerCompletion() async {
-    if (_currentStatus == UltradianRhythmStatus.study) {
-      // Pindah ke rest time
-      setState(() {
-        _currentStatus = UltradianRhythmStatus.rest;
-        _currentSeconds = _restTimeInSeconds;
-      });
-      _startTimer(); // Mulai timer untuk rest time
-    } else if (_currentStatus == UltradianRhythmStatus.rest) {
-      // Rest time selesai
-      _timer?.cancel(); // Pastikan timer utama berhenti
-
-      // --- Mulai getaran berkelanjutan di sini ---
-      _vibrateContinuously();
-
-      _showTakeFotoModal(context); // Tampilkan modal ambil foto
-    }
-  }
-
-  // Fungsi yang sekarang dipanggil oleh modal "Stop Method"
-  void _forceStopAndGoBack() {
-    _timer?.cancel();
-    _stopContinuousVibration(); // Pastikan getaran berhenti jika pengguna menghentikan manual
-    setState(() {
-      _currentStatus =
-          UltradianRhythmStatus.completed; // Atur status menjadi Completed
-      _currentSeconds = 0; // Reset timer
-    });
-    Navigator.pop(context); // Kembali ke halaman sebelumnya (detail method)
-  }
-
-  // Fungsi untuk menampilkan modal "Matikan Alarmnya!!"
-  Future<void> _showTakeFotoModal(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // User must tap button to dismiss
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: backgroundColor,
-          title: const Text(
-            'Matikan Alarmnya!!',
-            style: headerblack4,
-            textAlign: TextAlign.center, // Center the title text
-          ),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Klik "Ambil foto sekarang!" untuk mematikan alarm dan melanjutkan metode.',
-                  style: body1,
-                  textAlign: TextAlign.center, // Center the content text
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 5,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18.0, // Adjusted padding
-                    vertical: 18.0, // Adjusted padding
-                  ),
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(dialogContext).pop(); // Close modal
-                  _takePicture(); // Call the function to take a picture
-                },
-                child: const Text('Ambil foto sekarang!', style: headerblack),
-              ),
-            ),
-          ],
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timerState = ref.watch(
+      ultradianRhythmTimerViewModelProvider(methodId),
     );
-  }
+    final notifier = ref.read(
+      ultradianRhythmTimerViewModelProvider(methodId).notifier,
+    );
 
-  // Fungsi untuk mengambil foto
-  Future<void> _takePicture() async {
-    _stopContinuousVibration(); // --- Hentikan getaran di sini ---
-    try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-      if (image != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Foto berhasil diambil: ${image.path}')),
-        );
-        _showNextCycleConfirmationModal(); // Tampilkan modal konfirmasi berikutnya
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Pengambilan foto dibatalkan.')),
-        );
-        _showNextCycleConfirmationModal(); // Masih menawarkan konfirmasi setelah pembatalan
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Gagal mengakses kamera: $e')));
-      _showNextCycleConfirmationModal(); // Masih menawarkan konfirmasi setelah error
+    final currentSeconds = timerState['currentSeconds'] as int;
+    final currentStatus = timerState['currentStatus'] as TimerStatus;
+    final selectedImagePath = timerState['selectedImagePath'] as String?;
+    final isRunning = timerState['isRunning'] as bool;
+
+    String _formatTime(int seconds) {
+      int minutes = seconds ~/ 60;
+      int remainingSeconds = seconds % 60;
+      return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
     }
-  }
 
-  // Fungsi: Modal Konfirmasi Lanjutkan Siklus Timer
-  Future<void> _showNextCycleConfirmationModal() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: backgroundColor,
-          title: const Text(
-            'Lanjutkan Metode?',
-            style: headerblack4,
-            textAlign: TextAlign.center,
-          ),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Apakah Anda ingin melanjutkan siklus metode (kembali ke waktu belajar) atau kembali ke halaman detail metode?',
-                  style: body1,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 15.0,
-                    ),
-                    backgroundColor: backgroundColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    side: const BorderSide(color: redColor, width: 3),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Keluar', style: headerred),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 15.0,
-                    ),
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                    setState(() {
-                      _currentStatus = UltradianRhythmStatus.study;
-                      _currentSeconds = _studyTimeInSeconds;
-                    });
-                    _startTimer();
-                  },
-                  child: const Text('Lanjutkan', style: headerblack),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  String _formatTime(int seconds) {
-    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
-    final remainingSeconds = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutes:$remainingSeconds';
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel(); // Pastikan timer utama dibatalkan
-    _vibrationTimer?.cancel(); // Pastikan timer getaran juga dibatalkan
-    Vibration.cancel(); // Hentikan getaran yang mungkin sedang aktif
-    super.dispose();
-  }
-
-  // Fungsi untuk menampilkan modal konfirmasi Stop Method
-  Future<void> _showStopMethodConfirmationModal() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: backgroundColor,
-          title: const Text(
-            'Hentikan Metode',
-            style: headerblack4,
-            textAlign: TextAlign.center,
-          ),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Dengan mengklik lanjutkan untuk meneruskan metode atau klik berhenti untuk kembali ke metode detail.',
-                  style: body1,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 15.0,
-                    ),
-                    backgroundColor: backgroundColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    side: const BorderSide(color: redColor, width: 3),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                    _forceStopAndGoBack();
-                  },
-                  child: const Text('Stop', style: headerred),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 15.0,
-                    ),
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
-                  child: const Text('Lanjutkan', style: headerblack),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    String stepText;
-    String buttonText;
-    VoidCallback? onButtonPressed;
+    String stepText = '';
     Color buttonColor;
+    String buttonText = '';
     TextStyle buttonTextStyle;
 
-    if (_currentStatus == UltradianRhythmStatus.study ||
-        _currentStatus == UltradianRhythmStatus.rest) {
-      stepText =
-          (_currentStatus == UltradianRhythmStatus.study)
-              ? 'Study Time'
-              : 'Rest Time';
-      buttonText = 'Berhenti';
-      onButtonPressed = _showStopMethodConfirmationModal;
-      buttonColor = redColor;
-      buttonTextStyle = headerwhite;
-    } else {
-      stepText = 'Metode Selesai';
-      buttonText = 'Kembali';
+    switch (currentStatus) {
+      case TimerStatus.study:
+        stepText = 'Waktunya Fokus!';
+        buttonColor = primaryColor;
+        buttonText = isRunning ? 'Pause' : 'Start';
+        buttonTextStyle = headerblack;
+        break;
+      case TimerStatus.rest:
+        stepText = 'Waktunya Istirahat!';
+        buttonColor = secondaryColor;
+        buttonText = isRunning ? 'Pause' : 'Start';
+        buttonTextStyle = headerwhite;
+        break;
+      case TimerStatus.completed:
+        stepText = 'Sesi Selesai!';
+        buttonColor = Colors.green;
+        buttonText = 'Kembali ke Beranda';
+        buttonTextStyle = headerwhite;
+        break;
+      case TimerStatus.paused:
+        stepText = 'Timer Dijeda';
+        buttonColor = Colors.orange;
+        buttonText = 'Lanjutkan';
+        buttonTextStyle = headerblack;
+        break;
+    }
+
+    Function() onButtonPressed;
+    if (currentStatus == TimerStatus.completed) {
       onButtonPressed = () {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        notifier.resetTimer();
+        Navigator.pop(context);
       };
-      buttonColor = primaryColor;
-      buttonTextStyle = headerblack;
+    } else {
+      onButtonPressed = () {
+        notifier.startOrPauseTimer();
+      };
     }
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: backgroundColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        title: Text('${widget.methodName}', style: headerblack4),
-        centerTitle: true,
+        title: Text(
+          methodId == 'ultradian_rhythm' ? 'Ultradian Rhythm Timer' : '',
+          style: headerblack4,
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: secondaryColor.withOpacity(0.3),
+                  spreadRadius: 0,
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                notifier.resetTimer();
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.camera_alt, color: primaryColor),
+            onPressed: notifier.pickImage,
+          ),
+          IconButton(
+            icon: const Icon(Icons.volume_up, color: primaryColor),
+            onPressed: notifier.vibrateContinuously,
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh, color: primaryColor),
+            onPressed: notifier.resetTimer,
+          ),
+          IconButton(
+            icon: const Icon(Icons.swap_horiz, color: primaryColor),
+            onPressed: notifier.togglePhase,
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Lingkaran Besar Timer
+            if (selectedImagePath != null && selectedImagePath.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.file(
+                  File(selectedImagePath),
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder:
+                      (context, error, stackTrace) => const Icon(
+                        Icons.broken_image,
+                        size: 100,
+                        color: Colors.grey,
+                      ),
+                ),
+              )
+            else
+              Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey, width: 2),
+                ),
+                child: const Icon(
+                  Icons.camera_alt,
+                  size: 80,
+                  color: Colors.grey,
+                ),
+              ),
+            const SizedBox(height: 40),
             Container(
-              width: 300,
-              height: 300,
+              width: 200,
+              height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                color: Colors.white,
                 border: Border.all(color: secondaryColor, width: 5),
               ),
               child: Center(
                 child: Text(
-                  _formatTime(_currentSeconds),
+                  _formatTime(currentSeconds),
                   style: const TextStyle(
                     fontSize: 72,
                     fontWeight: FontWeight.bold,
@@ -406,7 +183,6 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
               ),
             ),
             const SizedBox(height: 40),
-            // Text Step
             Text(
               stepText,
               style: const TextStyle(
@@ -416,7 +192,6 @@ class _UltradianRhythmTimerPageState extends State<UltradianRhythmTimerPage> {
               ),
             ),
             const SizedBox(height: 60),
-            // Button Stop / Back to Home
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.7,
               height: 55,
