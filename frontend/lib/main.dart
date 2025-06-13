@@ -1,28 +1,8 @@
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(const MainApp());
-// }
-
-// class MainApp extends StatelessWidget {
-//   const MainApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       home: Scaffold(
-//         body: Center(
-//           child: Text('JAM (WIP)'),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import services.dart
 import 'package:jam/view/pages/splash_screen.dart';
 import 'package:jam/view/pages/main_task_page.dart';
-import 'view/widgets/colors.dart';
+import 'view/utils/colors.dart';
 import 'view/pages/addtask_page.dart'; // page untuk tambah task ke task list
 import 'view/pages/dashboard_page.dart'; // page untuk dashboard
 import 'view/pages/tasklist_page.dart'; // page untuk liat list task
@@ -31,6 +11,15 @@ import 'view/pages/profile_page.dart'; // page untuk profile
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
+  // Pastikan binding Flutter telah diinisialisasi
+  WidgetsFlutterBinding.ensureInitialized(); //
+
+  // Kunci orientasi ke potret saja
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, //
+    DeviceOrientation.portraitDown, //
+  ]);
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
