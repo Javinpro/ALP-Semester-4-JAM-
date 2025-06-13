@@ -39,45 +39,44 @@ class TaskListViewModel extends StateNotifier<List<Task>> {
     this._taskService,
     this._authService, {
     required TaskFilterType filterType,
-  }) : _filterType = filterType,
-       super([]) {
+  })  : _filterType = filterType,
+        super([]) {
     _loadTasks();
   }
 
-  void _loadTasks() {
+  Future<void> _loadTasks() async {
     final allTasks = _taskService.getTasks();
-    final currentUserId = _authService.getCurrentUserId();
+    final currentUserId = await _authService.getCurrentUserId();
+
+    if (currentUserId == null) {
+      print("Gagal mendapatkan user ID saat load tasks.");
+      state = [];
+      return;
+    }
 
     if (_filterType == TaskFilterType.posted) {
       state = allTasks.where((task) => task.userId == currentUserId).toList();
     } else if (_filterType == TaskFilterType.doing) {
-      state =
-          allTasks
-              .where((task) => task.assignedToUserId == currentUserId)
-              .toList();
+      state = allTasks
+          .where((task) => task.assignedToUserId == currentUserId)
+          .toList();
     }
   }
 
-  // Dipanggil saat ada perubahan pada task service (misal: task baru diposting, task di-assign)
-  void refreshTasks() {
-    _loadTasks();
+  Future<void> refreshTasks() async {
+    await _loadTasks();
   }
 
-  // Fungsi untuk meng-assign tugas kepada user (untuk tombol "Do this task")
-  void assignTaskToCurrentUser(String taskId) {
+  Future<void> assignTaskToCurrentUser(String taskId) async {
     final task = _taskService.getTaskById(taskId);
-    if (task != null && task.assignedToUserId == null) {
-      final updatedTask = task.copyWith(
-        assignedToUserId: _authService.getCurrentUserId(),
-      );
+    final userId = await _authService.getCurrentUserId();
+    if (task != null && task.assignedToUserId == null && userId != null) {
+      final updatedTask = task.copyWith(assignedToUserId: userId);
       _taskService.updateTask(updatedTask);
-      refreshTasks(); // Refresh list to reflect changes
-      // Jika ini adalah ViewModel untuk 'Doing', ia akan otomatis update.
-      // Jika ini adalah ViewModel untuk 'Posted', ia akan tetap sama.
+      await refreshTasks();
     }
   }
 
-  // Fungsi untuk mendapatkan jawaban terkait tugas yang sedang dikerjakan (untuk halaman 'Doing')
   List<Answer> getAnswersForTask(String taskId) {
     return _taskService.getAnswersForTask(taskId);
   }

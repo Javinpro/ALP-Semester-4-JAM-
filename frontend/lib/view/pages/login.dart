@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/utils/colors.dart';
-import 'package:jam/view/widgets/custom_text_field.dart';
-import 'package:jam/main.dart';
-import 'package:jam/view/pages/register.dart';
-import 'package:jam/view/utils/text_template.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final usernameController = TextEditingController();
+    final passwordController = TextEditingController();
+    final loginState = ref.watch(loginViewModelProvider);
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Stack(
@@ -30,24 +29,33 @@ class LoginPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   sizedbox5,
-
                   const Text(
                     'Login below to manage and access all of our features',
                     style: body1,
                     textAlign: TextAlign.center,
                   ),
                   sizedbox4,
-                  const CustomTextField(
+                  CustomTextField(
                     labelText: 'Username',
                     prefixIcon: Icons.account_circle_outlined,
+                    controller: usernameController,
                     readOnly: false,
                   ),
                   sizedbox2,
-                  const CustomTextField(
+                  CustomTextField(
                     labelText: 'Password',
                     prefixIcon: Icons.lock_outline,
+                    controller: passwordController,
+                    obscureText: true,
                     readOnly: false,
                   ),
+                  sizedbox2,
+                  if (loginState.errorMessage != null)
+                    Text(
+                      loginState.errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.center,
+                    ),
                 ],
               ),
             ),
@@ -69,25 +77,38 @@ class LoginPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FloatingBottomBar(),
-                          ),
-                        );
-                      },
-                      child: const Text('Login', style: headerblack),
+                      onPressed: loginState.isLoading
+                          ? null
+                          : () async {
+                              final success = await ref
+                                  .read(loginViewModelProvider.notifier)
+                                  .login(
+                                    usernameController.text.trim(),
+                                    passwordController.text.trim(),
+                                  );
+                              if (success && context.mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const FloatingBottomBar(),
+                                  ),
+                                );
+                              }
+                            },
+                      child: loginState.isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text('Login', style: headerblack),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        "Don't have an account? ",
-                        style: headerblack2,
-                      ),
+                      const Text("Don't have an account? ",
+                          style: headerblack2),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
