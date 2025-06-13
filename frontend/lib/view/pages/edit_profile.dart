@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/view/widgets/custom_text_field.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'colors.dart';
+import '../utils/colors.dart';
 
 class CalendarWidget extends StatefulWidget {
   @override

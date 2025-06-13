@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/view/widgets/custom_text_field.dart';
 import 'package:jam/main.dart';
 import 'package:jam/view/pages/register.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

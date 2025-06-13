@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/colors.dart';
+import '../utils/colors.dart';
 
 class StatusCard extends StatelessWidget {
   final String title;

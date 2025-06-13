@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/colors.dart'; // Make sure you have this file or replace with your actual colors
+import '../utils/colors.dart'; // Make sure you have this file or replace with your actual colors
 
 class AddItemPage extends StatefulWidget {
   const AddItemPage({super.key});
