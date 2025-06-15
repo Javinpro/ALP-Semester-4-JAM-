@@ -1,0 +1,26 @@
+<h2>Upload Gambar untuk Deteksi Objek</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Deteksi</button>
+</form>
+
+{% if image_url %}
+    <h3>Gambar Asli:</h3>
+    <img src="{{ image_url }}" width="300">
+{% endif %}
+
+{% if result %}
+    <h3>Hasil Deteksi (Gambar dengan Bounding Box):</h3>
+    <img src="{{ result }}" width="300">
+{% endif %}
+
+{% if detected_objects %}
+    <h3>Objek Terdeteksi:</h3>
+    <ul>
+        {% for obj in detected_objects %}
+            <li>{{ obj }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

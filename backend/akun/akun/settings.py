@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'tasks',
     'rest_framework_simplejwt.token_blacklist',
+    'recognition',
+    'traffic_controller',
 ]
 
 MIDDLEWARE = [
