@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verifikasi Objek</title>
+</head>
+<body>
+    <h2>Silakan Foto Objek: <strong>{{ expected_object }}</strong></h2>
+
+    <form action="/verify-object/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="expected_object" value="{{ expected_object }}">
+        
+        <label>Upload Gambar:</label>
+        <input type="file" name="image" accept="image/*" required><br><br>
+
+        <button type="submit">Verifikasi</button>
+    </form>
+
+    {% if result %}
+        <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>
