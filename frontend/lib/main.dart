@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import services.dart
 import 'package:jam/view/pages/splash_screen.dart';
-import 'package:jam/view/pages/main_task_page.dart';
+import 'package:jam/view/pages/posting_task/task_post_page.dart';
 import 'view/utils/colors.dart';
 import 'view/pages/addtask_page.dart'; // page untuk tambah task ke task list
 import 'view/pages/dashboard_page.dart'; // page untuk dashboard
 import 'view/pages/tasklist_page.dart'; // page untuk liat list task
 import 'view/pages/method_management/method_page.dart'; // page untuk alarm finder
-import 'view/pages/profile_page.dart'; // page untuk profile
+import 'view/pages/profile/profile_page.dart'; // page untuk profile
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
@@ -46,7 +46,7 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
   final List<Widget> _pages = const [
     DashboardPage(),
     TasklistPage(),
-    MainTaskPage(),
+    TaskpostPage(),
     MethodPage(),
     ProfilePage(),
   ];
