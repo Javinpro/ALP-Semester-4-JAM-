@@ -78,14 +78,7 @@ class DashboardPage extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 0),
-                      child: Text(
-                        'This Month',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                      child: Text('This Month', style: body5),
                     ),
                   ),
                   WeeklyCompletionBarChart(completedTasks: completedTasks),

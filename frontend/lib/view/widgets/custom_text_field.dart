@@ -30,6 +30,7 @@ class CustomTextField extends StatelessWidget {
       readOnly: readOnly,
       decoration: InputDecoration(
         labelText: labelText,
+        labelStyle: TextStyle(fontFamily: "Poppins"),
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),

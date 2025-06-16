@@ -1,5 +1,6 @@
+// lib/models/task.dart
 import 'package:flutter/foundation.dart';
-import 'package:uuid/uuid.dart'; // Tambahkan uuid di pubspec.yaml: uuid: ^4.0.0
+import 'package:uuid/uuid.dart';
 import 'package:jam/models/task_difficulty.dart';
 
 @immutable
@@ -52,12 +53,19 @@ class Task {
     required String userId,
     required String taskName,
     required DateTime deadline,
+    String? photoPath,
+    TaskDifficulty? difficulty,
+    String? description,
   }) {
     return Task(
       id: const Uuid().v4(),
       userId: userId,
       taskName: taskName,
       deadline: deadline,
+      photoPath: photoPath,
+      difficulty: difficulty,
+      description: description,
+      assignedToUserId: null, // Pastikan ini null saat membuat task baru
     );
   }
 }

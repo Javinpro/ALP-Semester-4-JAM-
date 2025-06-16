@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jam/services/auth_service.dart';
+import 'package:jam/view/pages/profile/edit_profile.dart';
+import 'package:jam/view/pages/login.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
+import 'package:jam/viewmodels/profile_provider.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -112,9 +119,7 @@ class ProfilePage extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(
-          child: Text('Error loading profile: $err'),
-        ),
+        error: (err, _) => Center(child: Text('Error loading profile: $err')),
       ),
     );
   }
@@ -148,9 +153,7 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         prefixIcon: Icon(prefixIcon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }

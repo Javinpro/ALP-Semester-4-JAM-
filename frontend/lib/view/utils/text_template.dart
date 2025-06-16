@@ -51,6 +51,12 @@ const headerblack5 = TextStyle(
   fontWeight: FontWeight.w600,
   color: secondaryColor,
 );
+const headerblack6 = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
+  color: secondaryColor,
+);
 const body1 = TextStyle(
   fontFamily: 'Poppins',
   fontSize: 18,
@@ -62,6 +68,30 @@ const body2 = TextStyle(
   fontSize: 15,
   fontWeight: FontWeight.w500,
   color: secondaryColor,
+);
+const body3 = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: secondaryColor,
+);
+const body4 = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  color: secondaryColor,
+);
+const body5 = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 24,
+  fontWeight: FontWeight.w600,
+  color: secondaryColor,
+);
+const bodygrey = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: greyColor,
 );
 
 const headeryellow = TextStyle(
@@ -90,3 +120,5 @@ const sizedbox8 = SizedBox(height: 100);
 const sizedbox9 = SizedBox(height: 35);
 const sizedbox10 = SizedBox(height: 200);
 const sizedbox11 = SizedBox(height: 40);
+const sizedbox12 = SizedBox(height: 10);
+const sizedbox13 = SizedBox(height: 150);

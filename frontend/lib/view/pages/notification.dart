@@ -40,6 +40,8 @@ class NotificationPage extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: backgroundColor,
+        scrolledUnderElevation: 0,
+
         title: const Text('Notifikasi', style: headerblack4),
         leading: Padding(
           padding: const EdgeInsets.all(6.0),

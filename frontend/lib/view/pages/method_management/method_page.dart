@@ -60,6 +60,8 @@ class MethodPage extends ConsumerWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18.0),
+                border: Border.all(color: secondaryColor, width: 3),
+
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(
@@ -78,7 +80,7 @@ class MethodPage extends ConsumerWidget {
                   ); // Call filter method on ViewModel
                 },
                 decoration: InputDecoration(
-                  hintText: 'Search methods...',
+                  hintText: 'Cari disini...',
                   hintStyle: headergrey2,
                   prefixIcon: Padding(
                     // Wrap the icon in Padding to give some space

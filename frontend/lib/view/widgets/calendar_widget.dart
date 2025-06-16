@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../utils/colors.dart';
@@ -49,54 +50,26 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             ),
             color: Colors.transparent, // No fill
           ),
-          defaultTextStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: Colors.black,
-          ),
+          defaultTextStyle: body3,
           weekendTextStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w900,
             // color: Colors.red,
           ),
-          todayTextStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: Colors.black,
-          ),
-          selectedTextStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: Colors.black,
-          ),
-          outsideTextStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: Colors.grey,
-          ),
+          todayTextStyle: body3,
+          selectedTextStyle: body3,
+          outsideTextStyle: bodygrey,
         ),
         headerStyle: HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
-          titleTextStyle: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w900,
-            color: Colors.black,
-          ),
+          titleTextStyle: headerblack6,
           leftChevronIcon: Icon(Icons.chevron_left, size: 28),
           rightChevronIcon: Icon(Icons.chevron_right, size: 28),
         ),
         daysOfWeekStyle: DaysOfWeekStyle(
-          weekdayStyle: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w900,
-            color: Colors.black87,
-          ),
-          weekendStyle: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w900,
-            // color: Colors.red,
-          ),
+          weekdayStyle: headerblack2,
+          weekendStyle: headerblack2,
         ),
       ),
     );
