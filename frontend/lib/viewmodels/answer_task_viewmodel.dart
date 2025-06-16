@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jam/models/answer.dart';
-import 'package:jam/models/task.dart';
 import 'package:jam/services/auth_service.dart';
 import 'package:jam/services/task_service.dart';
 import 'package:jam/viewmodels/common_providers.dart';
@@ -21,26 +20,25 @@ class AnswerTaskViewModel extends StateNotifier<Answer?> {
   final ImagePicker _imagePicker;
 
   AnswerTaskViewModel(
-  this._taskId,
-  this._authService,
-  this._taskService,
-  this._imagePicker,
-) : super(null) {
-  _initializeAnswer();
-}
-
-Future<void> _initializeAnswer() async {
-  final userId = await _authService.getCurrentUserId();
-  if (userId != null) {
-    state = Answer.createNew(
-      taskId: _taskId,
-      userId: userId,
-      photoPath: '',
-      description: '',
-    );
+    this._taskId,
+    this._authService,
+    this._taskService,
+    this._imagePicker,
+  ) : super(null) {
+    _initializeAnswer();
   }
-}
 
+  Future<void> _initializeAnswer() async {
+    final userId = await _authService.getCurrentUserId();
+    if (userId != null) {
+      state = Answer.createNew(
+        taskId: _taskId,
+        userId: userId,
+        photoPath: '',
+        description: '',
+      );
+    }
+  }
 
   void updatePhotoPath(String path) {
     if (state != null) {
@@ -82,7 +80,9 @@ Future<void> _initializeAnswer() async {
       final task = _taskService.getTaskById(_taskId);
       if (task != null) {
         _taskService.updateTask(
-          task.copyWith(assignedToUserId: await _authService.getCurrentUserId()),
+          task.copyWith(
+            assignedToUserId: await _authService.getCurrentUserId(),
+          ),
         );
         // Note: The task is still visible in "Doing" until approved by the task owner.
       }
