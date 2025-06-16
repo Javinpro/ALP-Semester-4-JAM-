@@ -46,6 +46,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
                             color: Colors.grey[700],
                           ),
                         ),
@@ -71,6 +72,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                                     value.toInt().toString(),
                                     style: TextStyle(
                                       fontSize: 12,
+                                      fontFamily: 'Poppins',
                                       color: Colors.grey[700],
                                     ),
                                   );
@@ -86,6 +88,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                                       return Text(
                                         '1',
                                         style: TextStyle(
+                                          fontFamily: 'Poppins',
                                           color: Colors.grey[700],
                                         ),
                                       );
@@ -93,6 +96,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                                       return Text(
                                         '2',
                                         style: TextStyle(
+                                          fontFamily: 'Poppins',
                                           color: Colors.grey[700],
                                         ),
                                       );
@@ -100,6 +104,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                                       return Text(
                                         '3',
                                         style: TextStyle(
+                                          fontFamily: 'Poppins',
                                           color: Colors.grey[700],
                                         ),
                                       );
@@ -107,6 +112,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                                       return Text(
                                         '4',
                                         style: TextStyle(
+                                          fontFamily: 'Poppins',
                                           color: Colors.grey[700],
                                         ),
                                       );
@@ -114,6 +120,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
                                       return Text(
                                         '5',
                                         style: TextStyle(
+                                          fontFamily: 'Poppins',
                                           color: Colors.grey[700],
                                         ),
                                       );
@@ -181,6 +188,7 @@ class WeeklyCompletionBarChart extends StatelessWidget {
               Text(
                 'Week',
                 style: TextStyle(
+                  fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey[700],

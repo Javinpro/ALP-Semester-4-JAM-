@@ -23,7 +23,7 @@ class TermsConditions extends StatelessWidget {
                   Image.asset('assets/img/logo.png', height: 100, width: 100),
                   sizedbox9,
                   const Text(
-                    'Terms & Conditions',
+                    'Syarat dan Ketentuan',
                     style: headerblack3,
                     textAlign: TextAlign.center,
                   ),
@@ -34,31 +34,31 @@ class TermsConditions extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
-                            '1. This App is intended for personal and non-commercial use only. You are fully responsible for any activity conducted under your account. You agree not to use the App for any unlawful purpose or in a way that may harm or infringe upon the rights of others.',
+                            '1. Aplikasi ini ditujukan untuk penggunaan pribadi dan non-komersial saja. Anda bertanggung jawab penuh atas setiap aktivitas yang dilakukan di bawah akun Anda. Anda setuju untuk tidak menggunakan Aplikasi untuk tujuan melanggar hukum atau dengan cara yang dapat membahayakan atau melanggar hak orang lain.\n',
                             style: body1,
                           ),
                           Text(
-                            '2. Users must provide accurate and up-to-date information during registration. You are responsible for maintaining the confidentiality of your account credentials. The developer is not liable for any loss or damage resulting from unauthorized use of your account.',
+                            '2. Pengguna harus memberikan informasi yang akurat dan terkini saat pendaftaran. Anda bertanggung jawab untuk menjaga kerahasiaan kredensial akun Anda. Pengembang tidak bertanggung jawab atas kerugian atau kerusakan yang diakibatkan oleh penggunaan akun Anda tanpa izin.\n',
                             style: body1,
                           ),
                           Text(
-                            '3. You are solely responsible for the content you upload in the Task Posting feature. It is strictly prohibited to post content that contains elements of hate speech, pornography, violence, copyright infringement, or anything illegal. We reserve the right to remove content deemed inappropriate without prior notice.',
+                            '3. Anda bertanggung jawab penuh atas konten yang Anda unggah dalam fitur Posting Tugas. Dilarang keras untuk mengunggah konten yang mengandung unsur ujaran kebencian, pornografi, kekerasan, pelanggaran hak cipta, atau hal-hal ilegal. Kami berhak menghapus konten yang dianggap tidak pantas tanpa pemberitahuan sebelumnya.\n',
                             style: body1,
                           ),
                           Text(
-                            '4. Points are awarded as a form of appreciation for user participation in the Task Posting feature. Points have no monetary value and cannot be exchanged for cash or goods unless otherwise specified by the developer.',
+                            '4. Poin diberikan sebagai bentuk apresiasi atas partisipasi pengguna dalam fitur Posting Tugas. Poin tidak memiliki nilai moneter dan tidak dapat ditukar dengan uang tunai atau barang, kecuali ditentukan lain oleh pengembang.\n',
                             style: body1,
                           ),
                           Text(
-                            '5. Your personal data will be stored and used in accordance with our Privacy Policy. Photos taken to deactivate the alarm will not be permanently stored without the user’s explicit consent.',
+                            '5. Data pribadi Anda akan disimpan dan digunakan sesuai dengan Kebijakan Privasi kami. Foto yang diambil untuk menonaktifkan alarm tidak akan disimpan secara permanen tanpa persetujuan eksplisit dari pengguna.\n',
                             style: body1,
                           ),
                           Text(
-                            '6. The developer reserves the right to modify features, suspend, or permanently discontinue the service without prior notice. Users may not hold the developer liable for any losses resulting from such changes or service termination.',
+                            '6. Pengembang berhak untuk mengubah fitur, menangguhkan, atau menghentikan layanan secara permanen tanpa pemberitahuan sebelumnya. Pengguna tidak dapat menuntut pengembang atas kerugian yang diakibatkan oleh perubahan atau penghentian layanan tersebut.\n',
                             style: body1,
                           ),
                           Text(
-                            '7. The App is provided “as-is” without any warranty of any kind. The developer shall not be held liable for any direct, indirect, incidental, or consequential damages arising from the use of the App.',
+                            '7. Aplikasi ini disediakan “sebagaimana adanya” tanpa jaminan dalam bentuk apa pun. Pengembang tidak bertanggung jawab atas kerugian langsung, tidak langsung, insidental, atau konsekuensial yang timbul dari penggunaan Aplikasi.\n',
                             style: body1,
                           ),
                         ],
@@ -83,7 +83,7 @@ class TermsConditions extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Text('Agree', style: headerblack),
+                      child: const Text('Setuju', style: headerblack),
                     ),
                   ),
                 ],
