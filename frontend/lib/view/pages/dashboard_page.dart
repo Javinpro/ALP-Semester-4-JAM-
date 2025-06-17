@@ -5,6 +5,7 @@ import 'package:jam/view/utils/text_template.dart';
 import 'notification.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/chart_widget.dart';
+import '../widgets/fab.dart';
 
 import '../widgets/activitycalendar_page.dart'; // for testing
 import 'progresstracker_page.dart'; // for testing
@@ -56,6 +57,11 @@ class DashboardPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: Positioned(
+        bottom: 125,
+        right: 16,
+        child: AddItemFAB(),
       ),
       body: SingleChildScrollView(
         child: Column(
