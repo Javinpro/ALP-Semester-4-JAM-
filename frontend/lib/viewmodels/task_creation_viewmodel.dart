@@ -85,4 +85,3 @@ class TaskCreationViewModel extends StateNotifier<Task> {
     }
   }
 }
-
