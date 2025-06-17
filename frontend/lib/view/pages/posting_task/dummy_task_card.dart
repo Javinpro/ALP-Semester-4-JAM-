@@ -12,9 +12,9 @@ final List<Task> allDummyTasks = [
   Task(
     id: _uuid.v4(),
     userId: currentLoggedInUserId,
-    taskName: 'Desain Logo Baru untuk Aplikasi',
+    taskName: 'Pemrograman Web',
     description:
-        'Mendesain logo modern dan minimalis untuk aplikasi mobile JAM. Preferensi warna cerah.',
+        'Membuat website sederhana menggunakan HTML, CSS, dan JavaScript.',
     deadline: DateTime(
       2025,
       6,

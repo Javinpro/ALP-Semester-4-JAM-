@@ -9,11 +9,10 @@ class Task {
   final String userId; // ID user yang memposting tugas
   final String taskName;
   final DateTime deadline;
-  final String? photoPath; // Path foto tugas
-  final TaskDifficulty? difficulty; // Tingkat kesulitan
-  final String? description; // Deskripsi tugas
-  final String?
-  assignedToUserId; // ID user yang sedang mengerjakan tugas ini (null jika belum dikerjakan)
+  final String? photoPath;
+  final TaskDifficulty? difficulty;
+  final String? description;
+  final String? assignedToUserId; // ID user yang sedang mengerjakan tugas ini
 
   const Task({
     required this.id,
@@ -34,7 +33,7 @@ class Task {
     String? photoPath,
     TaskDifficulty? difficulty,
     String? description,
-    String? assignedToUserId,
+    String? assignedToUserId, // Perhatikan: ini bisa null
   }) {
     return Task(
       id: id ?? this.id,
@@ -44,18 +43,19 @@ class Task {
       photoPath: photoPath ?? this.photoPath,
       difficulty: difficulty ?? this.difficulty,
       description: description ?? this.description,
-      assignedToUserId: assignedToUserId, // Penting: bisa disetel null
+      assignedToUserId: assignedToUserId, // Penting: ini bisa disetel null
     );
   }
 
   // Factory constructor untuk membuat task baru dengan ID unik
   factory Task.createNew({
-    required String userId,
+    required String userId, // User yang memposting
     required String taskName,
     required DateTime deadline,
     String? photoPath,
     TaskDifficulty? difficulty,
     String? description,
+    String? assignedToUserId, // Tambahkan ini sebagai parameter opsional
   }) {
     return Task(
       id: const Uuid().v4(),
@@ -65,7 +65,8 @@ class Task {
       photoPath: photoPath,
       difficulty: difficulty,
       description: description,
-      assignedToUserId: null, // Pastikan ini null saat membuat task baru
+      // Jika assignedToUserId tidak diberikan, secara default sama dengan userId yang memposting
+      assignedToUserId: assignedToUserId ?? userId,
     );
   }
 }

@@ -12,12 +12,12 @@ class TaskListViewModel extends StateNotifier<List<Task>> {
   }
 
   // Metode untuk "mengambil" atau meng-assign tugas ke current user
+  // di TaskListViewModel.assignTaskToCurrentUser
   void assignTaskToCurrentUser(String taskId, String currentUserId) {
     state = [
       for (final task in state)
         if (task.id == taskId)
-          // Membuat salinan tugas dengan assignedToUserId yang diperbarui
-          // dan userId diubah menjadi currentUserId (karena ini akan muncul di "Your Posts")
+          // Saat di-assign, kita set both userId and assignedToUserId ke currentUserId
           task.copyWith(assignedToUserId: currentUserId, userId: currentUserId)
         else
           task,

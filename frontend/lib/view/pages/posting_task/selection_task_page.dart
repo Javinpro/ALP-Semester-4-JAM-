@@ -1,15 +1,15 @@
 // lib/view/pages/posting_task/select_task_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Tetap gunakan Riverpod jika nanti diperlukan
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jam/models/task.dart'; // Import model Task
 import 'package:jam/view/pages/posting_task/dummy_task_card.dart';
+import 'package:jam/view/pages/status_card.dart';
 import 'package:jam/view/utils/colors.dart'; // Import colors
 import 'package:jam/view/utils/text_template.dart'; // Import text styles and sized boxes
 import 'package:jam/view/pages/posting_task/task_detail_page.dart'; // Import TaskDetailPage
 
 class SelectTaskPage extends ConsumerStatefulWidget {
-  // Ubah menjadi ConsumerStatefulWidget
   const SelectTaskPage({super.key});
 
   @override
@@ -46,7 +46,10 @@ class _SelectTaskPageState extends ConsumerState<SelectTaskPage> {
       appBar: AppBar(
         backgroundColor: backgroundColor,
         scrolledUnderElevation: 0,
-        title: const Text('Pilih Tugas', style: headerblack3), // Ubah judul
+        title: const Text(
+          'Pilih Tugas',
+          style: headerblack4,
+        ), // Judul yang benar
         leading: Padding(
           padding: const EdgeInsets.all(6.0),
           child: Container(
@@ -86,64 +89,47 @@ class _SelectTaskPageState extends ConsumerState<SelectTaskPage> {
                   final task = _availableTasks[index];
                   final bool isSelected = _selectedTaskId == task.id;
 
-                  return Card(
-                    color:
-                        isSelected
-                            ? secondaryColor.withOpacity(0.3)
-                            : primaryColor, // Warna kartu berdasarkan pilihan
-                    elevation: 4.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side: BorderSide(
-                        color:
-                            isSelected
-                                ? secondaryColor
-                                : Colors
-                                    .transparent, // Border untuk yang terpilih
-                        width: 2,
-                      ),
-                    ),
-                    child: InkWell(
-                      // Menggunakan InkWell agar card bisa ditekan
-                      onTap: () => _toggleTaskSelection(task.id),
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    task.taskName,
-                                    style: headerblack3,
-                                  ), // Nama task
-                                  sizedbox5, // Spasi kecil
-                                  Text(
-                                    'Deadline: ${task.deadline.day}/${task.deadline.month}/${task.deadline.year} - ${task.deadline.hour.toString().padLeft(2, '0')}:${task.deadline.minute.toString().padLeft(2, '0')}',
-                                    style: body2.copyWith(
-                                      color: Colors.grey[700],
-                                    ), // Deadline
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Icon(
+                  // Menggunakan StatusCard di sini
+                  return GestureDetector(
+                    // Menggunakan GestureDetector untuk menangani tap pada StatusCard
+                    onTap: () => _toggleTaskSelection(task.id),
+                    child: Stack(
+                      // Menggunakan Stack untuk menempatkan ikon pilihan di atas StatusCard
+                      children: [
+                        // StatusCard sebagai basis tampilan
+                        StatusCard(
+                          title: task.taskName, // Nama tugas
+                          date:
+                              '${task.deadline.day}-${task.deadline.month}-${task.deadline.year}', // Tanggal deadline
+                          time:
+                              '${task.deadline.hour.toString().padLeft(2, '0')}:${task.deadline.minute.toString().padLeft(2, '0')}', // Waktu deadline
+                          // Anda bisa menambahkan properti lain ke StatusCard jika diperlukan untuk warna/border
+                          cardColor:
                               isSelected
-                                  ? Icons.check_circle_rounded
-                                  : Icons.radio_button_off_rounded,
-                              color: isSelected ? secondaryColor : Colors.grey,
-                              size: 28,
-                            ),
-                          ],
+                                  ? backgroundColor
+                                  : backgroundColor, // Memberikan warna latar belakang sesuai pilihan
+                          borderColor:
+                              isSelected
+                                  ? secondaryColor
+                                  : Colors.transparent, // Border sesuai pilihan
                         ),
-                      ),
+                        // Ikon pilihan di pojok kanan atas atau di tengah trailing
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Icon(
+                            isSelected
+                                ? Icons.check_circle_rounded
+                                : Icons.radio_button_off_rounded,
+                            color: isSelected ? secondaryColor : secondaryColor,
+                            size: 28,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
-                separatorBuilder:
-                    (context, index) => sizedbox1, // Pemisah antar card
+                separatorBuilder: (context, index) => sizedbox1,
               ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -154,12 +140,9 @@ class _SelectTaskPageState extends ConsumerState<SelectTaskPage> {
               ),
             );
           } else {
-            // Cari tugas yang dipilih dari _availableTasks
             final selectedTask = _availableTasks.firstWhere(
               (task) => task.id == _selectedTaskId,
             );
-
-            // Navigasi ke TaskDetailPage dengan membawa objek tugas
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -168,9 +151,9 @@ class _SelectTaskPageState extends ConsumerState<SelectTaskPage> {
             );
           }
         },
-        label: const Text('Lihat Detail Tugas', style: headerwhite),
-        icon: const Icon(Icons.arrow_forward, color: Colors.white),
-        backgroundColor: secondaryColor,
+        label: const Text('Pindah ke Detail Unggahan', style: headerblack),
+        icon: const Icon(Icons.arrow_forward, color: secondaryColor),
+        backgroundColor: primaryColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

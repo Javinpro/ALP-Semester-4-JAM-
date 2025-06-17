@@ -1,3 +1,4 @@
+// lib/view/widgets/status_card.dart
 import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
@@ -5,12 +6,16 @@ class StatusCard extends StatelessWidget {
   final String title;
   final String date;
   final String time;
+  final Color? cardColor; // <-- Tambahkan properti ini
+  final Color? borderColor; // <-- Tambahkan properti ini
 
   const StatusCard({
     super.key,
     required this.title,
     required this.date,
     required this.time,
+    this.cardColor, // <-- Jadikan opsional
+    this.borderColor, // <-- Jadikan opsional
   });
 
   @override
@@ -19,8 +24,14 @@ class StatusCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12), // bottom spacing between cards
       child: Card(
         elevation: 2,
-        color: backgroundColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: cardColor ?? backgroundColor, // Gunakan cardColor atau default
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: borderColor ?? Colors.transparent,
+            width: 2,
+          ), // Gunakan borderColor atau default
+        ),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -31,7 +42,7 @@ class StatusCard extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
-                  fontFamily: 'Poppins',
+                  fontFamily: 'Poppins', // Pastikan font Poppins tersedia
                 ),
               ),
               const SizedBox(height: 8),
