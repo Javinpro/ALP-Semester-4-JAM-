@@ -1,192 +1,206 @@
+// view/pages/method_management/method_page.dart
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/view/pages/method_management/detail_method/Metode_52-17.dart';
 import 'package:jam/view/pages/method_management/detail_method/Ultradian_Rhythm.dart';
 import 'package:jam/view/pages/method_management/detail_method/pomodoro.dart';
 import 'package:jam/view/pages/notification.dart';
-import 'package:jam/view/widgets/text_template.dart'; // Make sure this path is correct for your color definitions
+import 'package:jam/view/utils/text_template.dart';
+import 'package:jam/viewmodels/method_list_viewmodel.dart'; // Import ViewModel
 
-class MethodPage extends StatefulWidget {
+class MethodPage extends ConsumerWidget {
   const MethodPage({super.key});
 
   @override
-  State<MethodPage> createState() => _MethodPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final methods = ref.watch(
+      methodListViewModelProvider,
+    ); // Watch filtered methods
+    final viewModel = ref.read(
+      methodListViewModelProvider.notifier,
+    ); // Access the ViewModel
 
-class _MethodPageState extends State<MethodPage> {
-  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          backgroundColor, // Using the background color from your imported file
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: AppBar(
-          backgroundColor: backgroundColor,
-          elevation: 0,
-          title: const Text('Method Page', style: headerblack4),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 20.0, top: 10.0),
-              child: CircleAvatar(
-                backgroundColor: secondaryColor,
-                radius: 30, // Increased size
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: backgroundColor,
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: backgroundColor,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: const Text('Method Page', style: headerblack4),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 20.0, top: 10.0),
+            child: CircleAvatar(
+              backgroundColor: secondaryColor,
+              radius: 30,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.notifications_none,
+                  color: backgroundColor,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18.0),
+                border: Border.all(color: secondaryColor, width: 3),
+
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(
+                      0.1,
+                    ), // Shadow color and opacity
+                    spreadRadius: 1, // How much the shadow spreads
+                    blurRadius: 5, // How blurred the shadow is
+                    offset: const Offset(0, 5), // Offset of the shadow
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationPage(),
+                ],
+              ),
+              child: TextField(
+                onChanged: (query) {
+                  viewModel.filterMethods(
+                    query,
+                  ); // Call filter method on ViewModel
+                },
+                decoration: InputDecoration(
+                  hintText: 'Cari disini...',
+                  hintStyle: headergrey2,
+                  prefixIcon: Padding(
+                    // Wrap the icon in Padding to give some space
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      // Wrap the icon with CircleAvatar
+                      backgroundColor:
+                          secondaryColor, // Set the background color for the circle
+                      child: const Icon(
+                        Icons.search,
+                        color: primaryColor, // Set icon color for contrast
                       ),
-                    );
-                  },
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: backgroundColor,
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              // --- Search Bar ---
-              Container(
-                margin: const EdgeInsets.only(bottom: 24.0),
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: backgroundColor, // Slightly transparent white
-                  borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: secondaryColor.withOpacity(0.3),
-                      spreadRadius: 0, // Seberapa jauh bayangan menyebar
-                      blurRadius: 6, // Seberapa buram bayangan
-                      offset: const Offset(0, 3), // Pergeseran bayangan (x, y)
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  style: TextStyle(color: secondaryColor),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
-                    hintText: "Search method...",
-                    hintStyle: headergrey,
-                    border: InputBorder.none,
-                    icon: Container(
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.search, color: primaryColor),
-                    ),
-                  ),
-                ),
-              ),
-
-              // --- Cards ---
-              _buildMethodCard(
-                context,
-                imagePath:
-                    'assets/img/Pomodoro.jpg', // Replace with your image path
-                title: 'Pomodoro',
-                description:
-                    'Membagi pekerjaan menjadi interval 25 menit yang dipisahkan oleh istirahat singkat 10 menit.',
-                detailPage: const PomodoroDetailPage(
-                  title: 'Pomodoro',
-                  title2: 'Langkah Metode : ',
-                  imagePath: 'assets/img/Pomodoro.jpg',
-                ),
-              ),
-              sizedbox11,
-              _buildMethodCard(
-                context,
-                imagePath:
-                    'assets/img/Metode 5217.jpg', // Replace with your image path
-                title: 'Metode 52/17',
-                description:
-                    'Fokus pada pekerjaan selama 52 menit, diikuti dengan istirahat selama 17 menit.',
-                detailPage: const Metode5217Page(
-                  title: 'Metode 52/17',
-                  title2: 'Langkah Metode : ',
-                  imagePath: 'assets/img/Metode 5217.jpg',
-                ),
-              ),
-              sizedbox11,
-              _buildMethodCard(
-                context,
-                imagePath:
-                    'assets/img/Ultradian Rhythm.jpg', // Replace with your image path
-                title: 'Ultradian Rhythm',
-                description:
-                    'Fokus pada pekerjaan intensif selama 90 menit, diikuti dengan istirahat selama 30 menit.',
-                detailPage: const UltradianRhythmPage(
-                  title: 'Ultradian Rhythm',
-                  title2: 'Langkah Metode : ',
-                  imagePath: 'assets/img/Ultradian Rhythm.jpg',
-                ),
-              ),
-              sizedbox10,
-            ],
           ),
-        ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 120.0),
+              itemCount: methods.length,
+              itemBuilder: (context, index) {
+                final method = methods[index];
+                Widget detailPage;
+                // Determine the appropriate detail page based on method ID
+                if (method.id == 'pomodoro') {
+                  detailPage = PomodoroDetailPage(
+                    title: method.title,
+                    title2: method.title2,
+                    title3: method.title3,
+                    imagePath: method.imagePath,
+                  );
+                } else if (method.id == 'metode_52_17') {
+                  detailPage = Metode5217Page(
+                    title: method.title,
+                    title2: method.title2,
+                    title3: method.title3,
+                    imagePath: method.imagePath,
+                  );
+                } else if (method.id == 'ultradian_rhythm') {
+                  detailPage = UltradianRhythmPage(
+                    title: method.title,
+                    title2: method.title2,
+                    title3: method.title3,
+                    imagePath: method.imagePath,
+                  );
+                } else {
+                  detailPage = const Text('Unknown Method'); // Fallback
+                }
+
+                return MethodCard(
+                  imagePath: method.imagePath,
+                  title: method.title,
+                  description:
+                      method.title2, // Using title2 as a short description
+                  detailPage: detailPage,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildMethodCard(
-    BuildContext context, {
-    required String imagePath,
-    required String title,
-    required String description,
-    required Widget detailPage,
-  }) {
+// MethodCard (No changes needed, already a StatelessWidget)
+class MethodCard extends StatelessWidget {
+  final String imagePath;
+  final String title;
+  final String description;
+  final Widget detailPage;
+
+  const MethodCard({
+    super.key,
+    required this.imagePath,
+    required this.title,
+    required this.description,
+    required this.detailPage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      color: Colors.white, // Card background color
+      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      color: backgroundColor,
+      elevation: 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Image.asset(
-                imagePath,
-                width: double.infinity,
-                height: 150,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: double.infinity,
-                    height: 150,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.broken_image, color: Colors.grey),
-                  );
-                },
+            Align(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  imagePath,
+                  width: 300,
+                  height: 180,
+                  fit: BoxFit.cover,
+                  errorBuilder:
+                      (context, error, stackTrace) => const Icon(
+                        Icons.error,
+                        size: 100,
+                      ), // Placeholder error
+                ),
               ),
             ),
             const SizedBox(height: 12.0),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
+            Text(title, style: headerblack),
             const SizedBox(height: 8.0),
-            Text(
-              description,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-            ),
+            Text(description, style: headergrey2),
             const SizedBox(height: 12.0),
             Align(
               alignment: Alignment.bottomRight,
@@ -199,7 +213,7 @@ class _MethodPageState extends State<MethodPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    elevation: 4, // Tambahkan efek bayangan
+                    elevation: 4,
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -207,7 +221,7 @@ class _MethodPageState extends State<MethodPage> {
                       MaterialPageRoute(builder: (context) => detailPage),
                     );
                   },
-                  child: const Text('Start', style: headerblack),
+                  child: const Text('Lihat detail', style: headerblack),
                 ),
               ),
             ),

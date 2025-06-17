@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart'; // Tambahkan intl di pubspec.yaml: intl: ^0.19.0
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 import 'package:jam/models/task_difficulty.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:jam/models/task.dart';
-import 'package:jam/view/pages/answer_task_page.dart';
-import 'package:jam/view/pages/task_detail_page.dart';
 
 class TaskCard extends ConsumerWidget {
   final Task task;
@@ -31,21 +29,21 @@ class TaskCard extends ConsumerWidget {
       child: InkWell(
         onTap: () {
           if (isDoingTask) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AnswerTaskPage(taskId: task.id),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => AnswerTaskPage(taskId: task.id),
+            //   ),
+            // );
           } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) =>
-                        TaskDetailPage(taskId: task.id, isYourPost: isYourPost),
-              ),
-            );
+            // Navigator.push(
+            //   // context,
+            //   // MaterialPageRoute(
+            //   //   builder:
+            //   //       (context) =>
+            //   //           TaskDetailPage(taskId: task.id, isYourPost: isYourPost),
+            //   // ),
+            // );
           }
         },
         child: Padding(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
 
 import 'notification.dart';
 import '../widgets/calendar_widget.dart';
@@ -26,10 +26,11 @@ class DashboardPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(72),
         child: AppBar(
           backgroundColor: backgroundColor,
           elevation: 0,
+          scrolledUnderElevation: 0,
           title: const Text('Dashboard', style: headerblack4),
           actions: [
             Container(
@@ -77,14 +78,7 @@ class DashboardPage extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 0),
-                      child: Text(
-                        'This Month',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                      child: Text('This Month', style: body5),
                     ),
                   ),
                   WeeklyCompletionBarChart(completedTasks: completedTasks),
@@ -137,7 +131,6 @@ class DashboardPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 200), // mitigasi bottom navbar
-
                   // TESTING AREA
                   SizedBox(
                     width: double.infinity,

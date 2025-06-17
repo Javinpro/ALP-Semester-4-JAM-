@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/services/auth_service.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
+
 import 'package:jam/view/widgets/custom_text_field.dart';
 import 'package:jam/view/pages/login.dart';
 import 'package:jam/view/pages/terms_conditions.dart';
-import 'package:jam/main.dart';
-import 'package:jam/view/widgets/text_template.dart';
-import 'package:jam/services/auth_service.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -70,26 +70,26 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   Image.asset('assets/img/logo.png', height: 100, width: 100),
                   sizedbox9,
                   const Text(
-                    'Welcome To JAM',
+                    'Selamat datang di JAM',
                     style: headerblack3,
                     textAlign: TextAlign.center,
                   ),
                   sizedbox5,
                   const Text(
-                    'Regist your account below to manage and access all of our features',
+                    'Daftarkan akun Anda di bawah ini untuk mengakses semua fitur kami',
                     style: body1,
                     textAlign: TextAlign.center,
                   ),
                   sizedbox4,
                   CustomTextField(
-                    labelText: 'First Name',
+                    labelText: 'Nama Depan',
                     prefixIcon: Icons.person_outline,
                     controller: _firstName,
                     readOnly: false,
                   ),
                   sizedbox2,
                   CustomTextField(
-                    labelText: 'Last Name',
+                    labelText: 'Nama Belakang',
                     prefixIcon: Icons.person,
                     controller: _lastName,
                     readOnly: false,
@@ -119,7 +119,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   sizedbox6,
                   Wrap(
                     children: [
-                      const Text("With signing up, I’m agree with the ", style: headerblack2),
+                      const Text(
+                        "Dengan mendaftar, saya setuju dengan ",
+                        style: headerblack2,
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -129,9 +132,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                           );
                         },
-                        child: const Text('terms & conditions', style: headeryellow),
+                        child: const Text(
+                          'syarat & ketentuan',
+                          style: headeryellow,
+                        ),
                       ),
-                      const Text(" of JAM", style: headerblack2),
+                      const Text(" dari JAM", style: headerblack2),
                     ],
                   ),
                   sizedbox4,
@@ -145,16 +151,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         ),
                       ),
                       onPressed: _isLoading ? null : _handleRegister,
-                      child: _isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('Sign Up', style: headerblack),
+                      child:
+                          _isLoading
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text('Daftar', style: headerblack),
                     ),
                   ),
                   sizedbox6,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account? ", style: headerblack2),
+                      const Text("Sudah memiliki akun? ", style: headerblack2),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -164,7 +173,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                           );
                         },
-                        child: const Text('Click here', style: headeryellow),
+                        child: const Text('Klik di sini', style: headeryellow),
                       ),
                     ],
                   ),

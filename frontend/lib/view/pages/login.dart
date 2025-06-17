@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jam/view/widgets/colors.dart';
-import 'package:jam/view/widgets/custom_text_field.dart';
 import 'package:jam/main.dart';
+import 'package:jam/view/pages/profile/profile_page.dart';
 import 'package:jam/view/pages/register.dart';
-import 'package:jam/view/widgets/text_template.dart';
+import 'package:jam/view/utils/colors.dart';
+import 'package:jam/view/utils/text_template.dart';
 import 'package:jam/viewmodels/login_view_model.dart';
 
 class LoginPage extends ConsumerWidget {
@@ -18,6 +18,8 @@ class LoginPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: false,
+
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -31,13 +33,13 @@ class LoginPage extends ConsumerWidget {
                   Image.asset('assets/img/logo.png', height: 100, width: 100),
                   sizedbox9,
                   const Text(
-                    'Welcome To JAM',
+                    'Selamat datang di JAM',
                     style: headerblack3,
                     textAlign: TextAlign.center,
                   ),
                   sizedbox5,
                   const Text(
-                    'Login below to manage and access all of our features',
+                    'Login di bawah ini untuk mengakses semua fitur kami',
                     style: body1,
                     textAlign: TextAlign.center,
                   ),
@@ -60,7 +62,10 @@ class LoginPage extends ConsumerWidget {
                   if (loginState.errorMessage != null)
                     Text(
                       loginState.errorMessage!,
-                      style: const TextStyle(color: Colors.red),
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontFamily: 'Poppins',
+                      ),
                       textAlign: TextAlign.center,
                     ),
                 ],
@@ -71,6 +76,7 @@ class LoginPage extends ConsumerWidget {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
+
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,38 +90,40 @@ class LoginPage extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      onPressed: loginState.isLoading
-                          ? null
-                          : () async {
-                              final success = await ref
-                                  .read(loginViewModelProvider.notifier)
-                                  .login(
-                                    usernameController.text.trim(),
-                                    passwordController.text.trim(),
+                      onPressed:
+                          loginState.isLoading
+                              ? null
+                              : () async {
+                                final success = await ref
+                                    .read(loginViewModelProvider.notifier)
+                                    .login(
+                                      usernameController.text.trim(),
+                                      passwordController.text.trim(),
+                                    );
+                                if (success && context.mounted) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              const FloatingBottomBar(),
+                                    ),
                                   );
-                              if (success && context.mounted) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const FloatingBottomBar(),
-                                  ),
-                                );
-                              }
-                            },
-                      child: loginState.isLoading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const Text('Login', style: headerblack),
+                                }
+                              },
+                      child:
+                          loginState.isLoading
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text('Login', style: headerblack),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account? ",
-                          style: headerblack2),
+                      const Text("Tidak memiliki akun? ", style: headerblack2),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -125,7 +133,7 @@ class LoginPage extends ConsumerWidget {
                             ),
                           );
                         },
-                        child: const Text('Click here', style: headeryellow),
+                        child: const Text('Klik di sini', style: headeryellow),
                       ),
                     ],
                   ),

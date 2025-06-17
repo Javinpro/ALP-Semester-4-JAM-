@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,16 +8,16 @@ class AuthService {
   final _dio = Dio();
   final _storage = const FlutterSecureStorage();
 
-  final String baseUrl = 'http://127.0.0.1:8000/api/accounts';
+  final String baseUrl = 'http://192.168.149.54:8000/api/accounts';
 
   // Login user dan simpan token + user_id
   Future<bool> login(String username, String password) async {
     final url = '$baseUrl/login/';
     try {
-      final response = await _dio.post(url, data: {
-        'username': username,
-        'password': password,
-      });
+      final response = await _dio.post(
+        url,
+        data: {'username': username, 'password': password},
+      );
 
       if (response.statusCode == 200) {
         final accessToken = response.data['access'];
@@ -27,7 +26,10 @@ class AuthService {
 
         await _storage.write(key: 'access_token', value: accessToken);
         await _storage.write(key: 'refresh_token', value: refreshToken);
-        await _storage.write(key: 'user_id', value: userId.toString()); // simpan user ID
+        await _storage.write(
+          key: 'user_id',
+          value: userId.toString(),
+        ); // simpan user ID
         return true;
       }
     } catch (e) {
@@ -48,9 +50,7 @@ class AuthService {
       final response = await _dio.post(
         url,
         data: {'refresh': refreshToken},
-        options: Options(headers: {
-          'Authorization': 'Bearer $accessToken',
-        }),
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
 
       if (response.statusCode == 205) {
@@ -62,7 +62,6 @@ class AuthService {
     }
     return false;
   }
-
 
   // Ambil token access saat ini
   Future<String?> getAccessToken() async {
@@ -80,12 +79,16 @@ class AuthService {
     if (refreshToken == null) return;
 
     try {
-      final response = await _dio.post('$baseUrl/token/refresh/', data: {
-        'refresh': refreshToken,
-      });
+      final response = await _dio.post(
+        '$baseUrl/token/refresh/',
+        data: {'refresh': refreshToken},
+      );
 
       if (response.statusCode == 200) {
-        await _storage.write(key: 'access_token', value: response.data['access']);
+        await _storage.write(
+          key: 'access_token',
+          value: response.data['access'],
+        );
       }
     } catch (e) {
       print('Refresh token error: $e');
@@ -98,9 +101,7 @@ class AuthService {
 
     final response = await _dio.get(
       '$baseUrl/profile/',
-      options: Options(headers: {
-        'Authorization': 'Bearer $token',
-      }),
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
 
     return response.data;
@@ -114,12 +115,15 @@ class AuthService {
   }) async {
     final url = '$baseUrl/register/';
     try {
-      final response = await _dio.post(url, data: {
-        'username': username,
-        'password': password,
-        'first_name': firstName,
-        'last_name': lastName,
-      });
+      final response = await _dio.post(
+        url,
+        data: {
+          'username': username,
+          'password': password,
+          'first_name': firstName,
+          'last_name': lastName,
+        },
+      );
 
       return response.statusCode == 201;
     } catch (e) {
@@ -127,5 +131,4 @@ class AuthService {
       return false;
     }
   }
-
 }

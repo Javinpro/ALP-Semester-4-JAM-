@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/colors.dart';
+import '../utils/colors.dart';
 
 class StatusCard extends StatelessWidget {
   final String title;
@@ -29,8 +29,9 @@ class StatusCard extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 20,
+                  fontFamily: 'Poppins',
                 ),
               ),
               const SizedBox(height: 8),
@@ -40,7 +41,8 @@ class StatusCard extends StatelessWidget {
                     date,
                     style: const TextStyle(
                       color: orangeColor,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -49,6 +51,7 @@ class StatusCard extends StatelessWidget {
                     style: TextStyle(
                       color: orangeColor,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -57,6 +60,7 @@ class StatusCard extends StatelessWidget {
                     style: const TextStyle(
                       color: orangeColor,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                 ],

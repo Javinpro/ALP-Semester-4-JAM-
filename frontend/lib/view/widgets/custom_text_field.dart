@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jam/view/widgets/colors.dart';
+import 'package:jam/view/utils/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelText;
@@ -30,6 +30,7 @@ class CustomTextField extends StatelessWidget {
       readOnly: readOnly,
       decoration: InputDecoration(
         labelText: labelText,
+        labelStyle: TextStyle(fontFamily: "Poppins"),
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
