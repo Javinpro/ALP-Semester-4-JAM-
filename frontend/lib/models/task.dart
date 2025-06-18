@@ -4,9 +4,11 @@ class Task {
   final String? description;
   final String? difficulty;
   final DateTime deadline;
+
   final bool isCompleted;
   final int userId;
   final bool inTodolist;
+
 
   Task({
     required this.id,
@@ -19,6 +21,7 @@ class Task {
     required this.inTodolist,
   });
 
+
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
       id: json['id'],
@@ -29,6 +32,7 @@ class Task {
       userId: json['user'], // pastikan ini sesuai response Django
       inTodolist: json['in_todolist'] ?? false,
       isCompleted: json['is_completed'] ?? false,
+
     );
   }
 }

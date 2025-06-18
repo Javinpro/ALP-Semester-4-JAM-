@@ -3,7 +3,7 @@ import 'package:flutter/services.dart'; // Import services.dart
 import 'package:jam/view/pages/splash_screen.dart';
 import 'package:jam/view/pages/posting_task/task_post_page.dart';
 import 'view/utils/colors.dart';
-import 'view/pages/addtask_page.dart'; // page untuk tambah task ke task list
+// import 'view/pages/addtask_page.dart'; 
 import 'view/pages/dashboard_page.dart'; // page untuk dashboard
 import 'view/pages/tasklist_page.dart'; // page untuk liat list task
 import 'view/pages/method_management/method_page.dart'; // page untuk alarm finder
@@ -97,22 +97,26 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
             onPageChanged: (index) => setState(() => _currentIndex = index),
             children: _pages,
           ),
-          Positioned(
-            bottom: 125, // adjust to raise above bottom bar
-            right: 16, // adjust for horizontal position
-            child: FloatingActionButton(
-              heroTag: 'add_task_fab',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddItemPage()),
-                );
-              },
-              backgroundColor: secondaryColor,
-              shape: CircleBorder(),
-              child: const Icon(Icons.add, color: primaryColor),
-            ),
-          ),
+
+// fetchingannu michael
+ //         Positioned(
+ //           bottom: 125, // adjust to raise above bottom bar
+ //           right: 16, // adjust for horizontal position
+ //           child: FloatingActionButton(
+ //             heroTag: 'add_task_fab',
+ //             onPressed: () {
+ //               Navigator.push(
+ //                 context,
+ //                 MaterialPageRoute(builder: (context) => const AddItemPage()),
+ //               );
+ //             },
+ //             backgroundColor: secondaryColor,
+ //             shape: CircleBorder(),
+ //             child: const Icon(Icons.add, color: primaryColor),
+ //           ),
+ //         ),
+
+
         ],
       ),
       bottomNavigationBar: Padding(

@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:jam/viewmodels/task_tab_viewmodel.dart';
 import 'package:jam/view/widgets/task_card.dart';
 import 'package:jam/view/utils/colors.dart';
+import '../widgets/fab.dart';
 
 class TasklistPage extends StatelessWidget {
   const TasklistPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return ChangeNotifierProvider(
       create: (_) => TaskTabViewModel()..fetchTasks(),
       child: Consumer<TaskTabViewModel>(
@@ -103,6 +105,11 @@ class ToggleButton extends StatelessWidget {
           ),
         ),
       ),
+//    return Scaffold(
+//      backgroundColor: backgroundColor,
+//      body: Center(child: Text("Add Task Page")),
+//      floatingActionButton: const AddItemFAB(),
+
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jam/main.dart';
+import 'package:jam/view/pages/dashboard_page.dart';
 import 'package:jam/view/pages/profile/profile_page.dart';
 import 'package:jam/view/pages/register.dart';
 import 'package:jam/view/utils/colors.dart';
@@ -59,6 +60,15 @@ class LoginPage extends ConsumerWidget {
                     readOnly: false,
                   ),
                   sizedbox2,
+                  ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DashboardPage()), // or Home()
+    );
+  },
+  child: Text('Go to Home (without login)'),
+),
                   if (loginState.errorMessage != null)
                     Text(
                       loginState.errorMessage!,
