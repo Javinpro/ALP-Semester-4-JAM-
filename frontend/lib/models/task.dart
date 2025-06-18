@@ -1,71 +1,34 @@
-// lib/models/task.dart
-import 'package:flutter/foundation.dart';
-import 'package:uuid/uuid.dart';
-import 'package:jam/models/task_difficulty.dart';
-
-@immutable
 class Task {
-  final String id;
-  final String userId; // ID user yang memposting tugas
-  final String taskName;
+  final int id;
+  final String title;
+  final String? description;
+  final String? difficulty;
   final DateTime deadline;
-  final String? photoPath; // Path foto tugas
-  final TaskDifficulty? difficulty; // Tingkat kesulitan
-  final String? description; // Deskripsi tugas
-  final String?
-  assignedToUserId; // ID user yang sedang mengerjakan tugas ini (null jika belum dikerjakan)
+  final bool isCompleted;
+  final int userId;
+  final bool inTodolist;
 
-  const Task({
+  Task({
     required this.id,
-    required this.userId,
-    required this.taskName,
-    required this.deadline,
-    this.photoPath,
-    this.difficulty,
+    required this.title,
     this.description,
-    this.assignedToUserId,
+    this.difficulty,
+    required this.deadline,
+    required this.isCompleted,
+    required this.userId,
+    required this.inTodolist,
   });
 
-  Task copyWith({
-    String? id,
-    String? userId,
-    String? taskName,
-    DateTime? deadline,
-    String? photoPath,
-    TaskDifficulty? difficulty,
-    String? description,
-    String? assignedToUserId,
-  }) {
+  factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      taskName: taskName ?? this.taskName,
-      deadline: deadline ?? this.deadline,
-      photoPath: photoPath ?? this.photoPath,
-      difficulty: difficulty ?? this.difficulty,
-      description: description ?? this.description,
-      assignedToUserId: assignedToUserId, // Penting: bisa disetel null
-    );
-  }
-
-  // Factory constructor untuk membuat task baru dengan ID unik
-  factory Task.createNew({
-    required String userId,
-    required String taskName,
-    required DateTime deadline,
-    String? photoPath,
-    TaskDifficulty? difficulty,
-    String? description,
-  }) {
-    return Task(
-      id: const Uuid().v4(),
-      userId: userId,
-      taskName: taskName,
-      deadline: deadline,
-      photoPath: photoPath,
-      difficulty: difficulty,
-      description: description,
-      assignedToUserId: null, // Pastikan ini null saat membuat task baru
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      difficulty: json['difficulty'],
+      deadline: DateTime.parse(json['deadline']),
+      userId: json['user'], // pastikan ini sesuai response Django
+      inTodolist: json['in_todolist'] ?? false,
+      isCompleted: json['is_completed'] ?? false,
     );
   }
 }

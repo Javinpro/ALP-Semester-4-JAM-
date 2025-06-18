@@ -11,6 +11,8 @@ from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from .serializers import ProfileSerializer
 from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 
 User = get_user_model()
 
@@ -62,3 +64,6 @@ class UnifiedProfileView(APIView):
         }
 
         return Response(combined_data)
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

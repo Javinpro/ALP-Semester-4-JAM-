@@ -46,7 +46,7 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
   final List<Widget> _pages = const [
     DashboardPage(),
     TasklistPage(),
-    TaskpostPage(),
+    // TaskpostPage(),
     MethodPage(),
     ProfilePage(),
   ];
@@ -101,6 +101,7 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
             bottom: 125, // adjust to raise above bottom bar
             right: 16, // adjust for horizontal position
             child: FloatingActionButton(
+              heroTag: 'add_task_fab',
               onPressed: () {
                 Navigator.push(
                   context,

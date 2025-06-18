@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import RegisterView, ProfileUpdateView, ProfileDetailView, LogoutView
+from .views import CustomTokenObtainPairView, RegisterView, ProfileUpdateView, ProfileDetailView, LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
-    path('login/', TokenObtainPairView.as_view(), name='login'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/', ProfileDetailView.as_view(), name='profile-detail'),
     path('profile/edit/', ProfileUpdateView.as_view(), name='profile-edit'),
