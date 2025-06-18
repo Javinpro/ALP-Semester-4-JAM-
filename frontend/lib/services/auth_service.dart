@@ -8,7 +8,7 @@ class AuthService {
   final _dio = Dio();
   final _storage = const FlutterSecureStorage();
 
-  final String baseUrl = 'http://192.168.149.54:8000/api/accounts';
+  final String baseUrl = 'http://127.0.0.1:8000/api/accounts';
 
   // Login user dan simpan token + user_id
   Future<bool> login(String username, String password) async {
@@ -24,6 +24,8 @@ class AuthService {
         final refreshToken = response.data['refresh'];
         final userId = response.data['user_id']; // pastikan backend kirim ini
 
+        print('[LOGIN] userId = $userId');
+        
         await _storage.write(key: 'access_token', value: accessToken);
         await _storage.write(key: 'refresh_token', value: refreshToken);
         await _storage.write(
@@ -37,6 +39,8 @@ class AuthService {
     }
     return false;
   }
+
+  
 
   // Logout user
   Future<bool> logout() async {
@@ -70,8 +74,11 @@ class AuthService {
 
   // Ambil user ID yang sedang login
   Future<String?> getCurrentUserId() async {
-    return await _storage.read(key: 'user_id');
+    final id = await _storage.read(key: 'user_id');
+    print('[AuthService] fetched user_id from storage: $id');
+    return id;
   }
+
 
   // Refresh access token (opsional)
   Future<void> refreshAccessToken() async {
@@ -131,4 +138,35 @@ class AuthService {
       return false;
     }
   }
+
+  Future<bool> updateProfile({
+    required String firstName,
+    required String lastName,
+    required String username,
+    String? password,
+  }) async {
+    final token = await _storage.read(key: 'access_token');
+    if (token == null) return false;
+
+    final data = {
+      'first_name': firstName,
+      'last_name': lastName,
+      'username': username,
+    };
+
+    if (password != null && password.isNotEmpty) {
+      data['password'] = password;
+    }
+
+    final response = await _dio.patch(
+      '$baseUrl/profile/edit/',
+      data: data,
+      options: Options(headers: {
+        'Authorization': 'Bearer $token',
+      }),
+    );
+
+    return response.statusCode == 200;
+  }
+
 }

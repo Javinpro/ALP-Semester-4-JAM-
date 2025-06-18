@@ -24,6 +24,16 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    @action(detail=False, methods=['get'], url_path='in_todolist')
+    def in_todolist(self, request):
+        queryset = Task.objects.filter(
+            user=request.user,
+            in_todolist=True
+        ).order_by('-created_at')
+
+        serializer = TaskSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
     @action(detail=True, methods=['post'])
     def add_to_todolist(self, request, pk=None):
         task = self.get_object()

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import '../utils/colors.dart'; // Make sure you have this file or replace with your actual colors
+import 'package:jam/services/task_service.dart';
+import 'package:intl/intl.dart';
 
 class AddItemPage extends StatefulWidget {
-  const AddItemPage({super.key});
+  final VoidCallback? onTaskAdded;
+
+
+  const AddItemPage({super.key, this.onTaskAdded});
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
@@ -70,7 +75,7 @@ class _AddItemPageState extends State<AddItemPage> {
             ),
             child: const Icon(Icons.arrow_back, color: secondaryColor),
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop()
         ),
       ),
       body: Column(
@@ -246,13 +251,38 @@ class _AddItemPageState extends State<AddItemPage> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Task added successfully')),
+
+                    final deadline = DateTime(
+                      _deadline!.year,
+                      _deadline!.month,
+                      _deadline!.day,
+                      _time?.hour ?? 0,
+                      _time?.minute ?? 0,
                     );
-                    Navigator.pop(context);
+
+                    final String formattedDeadline = deadline.toIso8601String();
+                    final TaskService taskService = TaskService();
+
+                    final success = await taskService.createTask(
+                      title: _taskName,
+                      description: _description,
+                      deadline: formattedDeadline,
+                    );
+
+                    if (success && mounted) {
+                      widget.onTaskAdded?.call();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Task added successfully')),
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Failed to add task')),
+                      );
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

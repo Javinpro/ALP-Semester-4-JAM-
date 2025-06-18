@@ -46,7 +46,7 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
   final List<Widget> _pages = const [
     DashboardPage(),
     TasklistPage(),
-    TaskpostPage(),
+    // TaskpostPage(),
     MethodPage(),
     ProfilePage(),
   ];
@@ -97,21 +97,26 @@ class FloatingBottomBarState extends State<FloatingBottomBar> {
             onPageChanged: (index) => setState(() => _currentIndex = index),
             children: _pages,
           ),
-          // Positioned(
-          //   bottom: 125, // adjust to raise above bottom bar
-          //   right: 16, // adjust for horizontal position
-          //   child: FloatingActionButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (context) => const AddItemPage()),
-          //       );
-          //     },
-          //     backgroundColor: secondaryColor,
-          //     shape: CircleBorder(),
-          //     child: const Icon(Icons.add, color: primaryColor),
-          //   ),
-          // ),
+
+// fetchingannu michael
+ //         Positioned(
+ //           bottom: 125, // adjust to raise above bottom bar
+ //           right: 16, // adjust for horizontal position
+ //           child: FloatingActionButton(
+ //             heroTag: 'add_task_fab',
+ //             onPressed: () {
+ //               Navigator.push(
+ //                 context,
+ //                 MaterialPageRoute(builder: (context) => const AddItemPage()),
+ //               );
+ //             },
+ //             backgroundColor: secondaryColor,
+ //             shape: CircleBorder(),
+ //             child: const Icon(Icons.add, color: primaryColor),
+ //           ),
+ //         ),
+
+
         ],
       ),
       bottomNavigationBar: Padding(

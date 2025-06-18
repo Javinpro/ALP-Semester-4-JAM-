@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart'; // Tambahkan intl di pubspec.yaml: intl: ^0.19.0
+import 'package:intl/intl.dart';
 import 'package:jam/view/utils/colors.dart';
 import 'package:jam/models/task_difficulty.dart';
 import 'package:jam/view/utils/text_template.dart';
@@ -9,49 +9,44 @@ import 'package:jam/models/task.dart';
 class TaskCard extends ConsumerWidget {
   final Task task;
   final bool isYourPost;
-  final bool
-  isDoingTask; // Indikator apakah card ini ditampilkan di halaman 'Doing'
+  final bool isDoingTask;
 
   const TaskCard({
-    super.key,
+    Key? key,
     required this.task,
     required this.isYourPost,
     this.isDoingTask = false,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: Colors.white,
       child: InkWell(
         onTap: () {
-          if (isDoingTask) {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => AnswerTaskPage(taskId: task.id),
-            //   ),
-            // );
-          } else {
-            // Navigator.push(
-            //   // context,
-            //   // MaterialPageRoute(
-            //   //   builder:
-            //   //       (context) =>
-            //   //           TaskDetailPage(taskId: task.id, isYourPost: isYourPost),
-            //   // ),
-            // );
-          }
+          // TODO: Aktifkan navigasi berdasarkan halaman
+          // if (isDoingTask) {
+          //   Navigator.push(context, MaterialPageRoute(
+          //     builder: (context) => AnswerTaskPage(taskId: task.id),
+          //   ));
+          // } else {
+          //   Navigator.push(context, MaterialPageRoute(
+          //     builder: (context) => TaskDetailPage(
+          //       taskId: task.id,
+          //       isYourPost: isYourPost,
+          //     ),
+          //   ));
+          // }
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(task.taskName, style: headerblack3),
+              Text(task.title, style: headerblack3),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -66,27 +61,28 @@ class TaskCard extends ConsumerWidget {
               if (task.difficulty != null) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Difficulty: ${task.difficulty!.displayName}',
+                  'Difficulty: ${task.difficulty}',
                   style: body2.copyWith(
-                    color:
-                        task.difficulty == TaskDifficulty.hard
-                            ? redColor
-                            : Colors.green,
+                    color: task.difficulty == 'susah' ? redColor : Colors.green,
                   ),
                 ),
               ],
-              if (isDoingTask && task.assignedToUserId != null) ...[
+              if (isDoingTask) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Status: Doing by you',
+                  'Status: Sedang dikerjakan',
                   style: body2.copyWith(color: primaryColor),
                 ),
               ],
-              // Anda bisa menambahkan foto preview di sini jika diinginkan
-              // if (task.photoPath != null && task.photoPath!.isNotEmpty) ...[
-              //   const SizedBox(height: 10),
-              //   Image.file(File(task.photoPath!), height: 100, width: 100, fit: BoxFit.cover),
-              // ],
+              if (task.description != null && task.description!.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  task.description!,
+                  style: body2,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ],
           ),
         ),
