@@ -1,0 +1,27 @@
+---
+Status: Decided
+Deciders: Javin
+Informed: Aryo, Michael
+---
+
+# MADR_12 - Model AI (backend)
+
+## Context and Problem Statement
+
+Memilih model AI yang dapat mendeteksi objek dengan akurat
+
+## Decision Drivers
+
+- deteksi objek dengan akurat
+- ada tutorialnya
+
+## Considered Options
+
+1. YOLO
+
+## Decision Outcome
+
+**Status: Decided**
+Keputusan: Menggunakan YOLO karena hanya itu didapat tutorialnya
+
+### Consequences
