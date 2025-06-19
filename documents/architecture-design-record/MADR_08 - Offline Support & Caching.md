@@ -1,5 +1,5 @@
 ---
-Status: Accepted
+Status: Decided
 Deciders: Javin
 Informed: Aryo, Michael
 ---
@@ -26,7 +26,7 @@ Aplikasi task list yang sedang dikembangkan harus tetap dapat diakses dan member
 
 ## Decision Outcome
 
-**Status: Accepted**
+**Status: Decided**
 Keputusan: Menggunakan mekanisme Offline first.
 
 ### Consequences
