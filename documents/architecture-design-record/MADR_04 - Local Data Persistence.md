@@ -1,5 +1,5 @@
 ---
-Status: Proposed
+Status: Decided
 Deciders: Javin
 Informed: Aryo, Michael
 ---
@@ -25,8 +25,8 @@ Menentukan mekanisme penyimpanan data untuk dukungan offline dan caching, piliha
 
 ## Decision Outcome
 
-**Status: Proposed**
-Keputusan: masih mengusulkan antara memakai SQLite atau ObjectBox.
+**Status: Decided**
+Keputusan:  memakai SQLite, karena bawaan Django.
 
 ### Consequences
 
@@ -40,18 +40,6 @@ SQLite
     - penggunaan ORM menambah lapisan abstraksi dan kompleksitas dalam project. 
     - meski fleksibel, menulis dan memelihara query SQL bisa menjadi lebih rumit dibandingkan dengan API query berbasis objek dari ObjectBox. 
 
-ObjectBox
-- Good:
-    - database objek berkinerja sangat tinggi untuk data yang besar dan kompleks.
-    - menyimpan dan mengambil objek secara langsung sesuai dengan paradigma berorientasi objek. 
-    - memiliki support yang baik untuk mendefinisikan dan mengelola relasi antar objek. 
-    - menyediakan API query yang ekspresif untuk mencari data berdasarkan berbagai kriteria tanpa perlu menulis SQL.
-- Bad:
-    - sedikit berbeda dari database relasional, jadi bisa mengambil waktu lagi untuk dipelajari. 
-    - meski kuat, tools dan integrasi pihak ketiga mungkin tidak seluas SQLite.
-    - ukuran librarynya mungkin sedikit lebih besar dibandingkan SQLite tanpa ORM.
-
 ## More Information
 
 - Pengertian SQLite: https://www.sqlite.org/
-- Pengertian ObjectBox: https://objectbox.io/

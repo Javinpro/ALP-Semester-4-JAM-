@@ -1,5 +1,5 @@
 ---
-Status: Proposed
+Status: Decided
 Deciders: Javin
 Informed: Aryo, Michael
 ---
@@ -23,18 +23,10 @@ Pemilihan pendekatan state management untuk pengembangan aplikasi. Pemilihan har
 
 ## Decision Outcome
 
-**Status: Proposed**
-Proposed: Menggunakan Bussiness Logic Component (BloC) atau Riverpod
+**Status: Decided**
+Decided: Riverpod
 
 ### Consequences
-
-BLoC
-- Good:
-    - Memisahkan class lagi antara event, state, dan business logic, idealnya BLoC dipakai untuk proyek besar atau fitur yang banyak. 
-    - Widget seperti BlocBuilder, BlocListener membuat UI lebih mudah mengamati dan merespons perubahan state.
-- Bad:
-    - Perlu banyak file (event, state, bloc) bahkan untuk logika yang simpel.
-    - Berpotensi *overkill* untuk aplikasi sederhana.
 
 Riverpod
 - Good:
@@ -45,6 +37,4 @@ Riverpod
     - Kurang integrasi langsung dengan package lain dibandingkan "flutter_bloc"
 
 ## More Information
-
-- BLoC: https://bloclibrary.dev/getting-started/
 - Riverpod: https://riverpod.dev/

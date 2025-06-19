@@ -1,5 +1,5 @@
 ---
-Status: Proposed
+Status: Decided
 Deciders: Javin
 Informed: Aryo, Michael
 ---
@@ -25,19 +25,10 @@ mengimplementasikan penanganan kesalahan dan pemantauan yang kuat, melibatkan al
 
 ## Decision Outcome
 
-**Status: Proposed**
-Keputusan: masih mengusulkan untuk menggunakan Firebase Crashlytics untuk pelaporan kesalahan dan analisis crash, dan mengimplementasikan solusi Sentry untuk pemantauan aplikasi dan debugging yang detail.
+**Status: Decided**
+Keputusan: memakai Sentry.
 
 ### Consequences
-
-Firebase Crashlytics
-- Good:
-    - menyediakan laporan crash yang detail, termasuk stack trace, informasi perangkat, dan dampak pengguna, sehingga memudahkan identifikasi dan diagnosis masalah kritis. 
-    - menawarkan pelaporan crash hampir secara real-time, memungkinkan kesadaran cepat terhadap masalah kritis yang memengaruhi pengguna. 
-    - terintegrasi dengan mulus dengan layanan Firebase lain yang mungkin kita gunakan (misalnya, Analytics), menyediakan platform terpadu untuk pemantauan aplikasi.
-    - memungkinkan pengelompokan crash berdasarkan versi build, perangkat, dan segmen pengguna, membantu dalam memprioritaskan perbaikan.
-- Bad:
-    - meskipun memungkinkan penambahan kunci dan log kustom ke laporan crash, alat ini tidak dirancang terutama untuk logging tingkat aplikasi yang detail dan pemantauan peristiwa non-fatal. 
 
 Sentry 
 - Good:
@@ -51,5 +42,4 @@ Sentry
 
 ## More Information
 
-- Pengertian Firebase Crashlytics: https://firebase.google.com/docs/crashlytics?hl=id
 - Pengertian Sentry: https://sentry.io/
