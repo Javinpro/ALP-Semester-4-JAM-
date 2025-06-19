@@ -25,3 +25,7 @@ Memilih model AI yang dapat mendeteksi objek dengan akurat
 Keputusan: Menggunakan YOLO karena hanya itu didapat tutorialnya
 
 ### Consequences
+- Good:
+Dapat mendeteksi objek dengan baik dan ada tutorial di youtube.
+- Bad:
+Susah mendeteksi benda kecil.
