@@ -12,3 +12,5 @@ Contents:
 1. MADR_08 - Offline Support & Caching
 1. MADR_09 - Error Handling & Monitoring
 1. MADR_10 - Testing Strategy & CI or CD Pipeline
+1. MADR_11 - Backend Architecture
+1. MADR_12 - Model AI
