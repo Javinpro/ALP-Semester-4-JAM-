@@ -4,7 +4,7 @@
 <h1>JAM APP</h1>
 <hr>
 
-<img src="gh-assets/logo-jam.png" style="max-width: 30%">
+<img src="gh-assets/logo-jam.png" style="max-width: 200px">
 
 <p><em>Streamline your assignment process, manage your tasks, and maximize your productivity with JAM</em></p>
 
